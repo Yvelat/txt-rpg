@@ -11,15 +11,21 @@ public class DungeonEditor : Editor
     {
         base.OnInspectorGUI();
 
-        int totalChance = serializedObject.FindProperty("totalChance").intValue;
+        int totalChanceCommon = serializedObject.FindProperty("totalChanceCommon").intValue;
+        int totalChanceRare = serializedObject.FindProperty("totalChanceRare").intValue;
 
         var style = new GUIStyle();
         style.fontStyle = FontStyle.Bold;
         style.fontSize = 18;
 
-        GUILayout.Label($"Total Chance = {totalChance}", style);
+        GUILayout.Label($"Total Chance Common = {totalChanceCommon}", style);
 
-        if (totalChance != 100)
+        if (totalChanceCommon != 100)
+            EditorGUILayout.HelpBox("La percentuale totale non è 100", MessageType.Error);
+
+        GUILayout.Label($"Total Chance Rare = {totalChanceRare}", style);
+
+        if (totalChanceRare != 100)
             EditorGUILayout.HelpBox("La percentuale totale non è 100", MessageType.Error);
 
     }

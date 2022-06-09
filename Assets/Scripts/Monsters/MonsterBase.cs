@@ -14,6 +14,7 @@ public class MonsterBase : ScriptableObject
     [SerializeField] Sprite battleIcon;
 
     [SerializeField] MonsterType type;
+    [SerializeField] Rarity rarity;
 
     //Statistiche Base
     [SerializeField] int maxHp;
@@ -121,6 +122,11 @@ public class MonsterBase : ScriptableObject
         get { return type; }
     }
 
+    public Rarity Rarity
+    {
+        get { return rarity; }
+    }
+
     public int MaxHp
     {
         get { return maxHp; }
@@ -223,6 +229,16 @@ public enum Stat
     //Statistiche di  battaglia (nascoste)
     Accuracy,
     Evasion
+}
+
+public enum Rarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    UltraRare,
+    Epic,
+    Legendary
 }
 
 public class TypeChart

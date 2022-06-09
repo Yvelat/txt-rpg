@@ -8,7 +8,17 @@ public class DungeonArea : MonoBehaviour
     [SerializeField] MapArea area;
     [SerializeField] TextMeshProUGUI infoText;
     [SerializeField] GameObject buttons;
+
+    [Header("Transitions")]
     [SerializeField] GameObject transition;
+    [SerializeField] GameObject preTransitionCommon;
+    [SerializeField] GameObject preTransitionRare;
+
+    [Header("Audio")]
+    [SerializeField] SingleAudioManager menuAudio;
+    [SerializeField] SingleAudioManager adventureAudio;
+    [SerializeField] SingleAudioManager commonEncounterAudio;
+    [SerializeField] SingleAudioManager rareEncounterAudio;
 
     Dungeon dungeon;
     Animator transitionAnim;
@@ -20,6 +30,10 @@ public class DungeonArea : MonoBehaviour
     private void OnEnable()
     {
         transition.SetActive(true);
+        menuAudio.Stop();
+        menuAudio.gameObject.SetActive(false);
+        adventureAudio.gameObject.SetActive(true);
+        adventureAudio.ResetAndPlay();
     }
 
     private void OnDisable()
@@ -62,7 +76,7 @@ public class DungeonArea : MonoBehaviour
             Debug.Log($"sarted: {randomWait}");
             yield return new WaitForSeconds(randomWait);
             yield return CheckEvent();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             yield return new WaitUntil(() => eventOccur == false);
             buttons.SetActive(true);
             searching = false;
@@ -91,6 +105,10 @@ public class DungeonArea : MonoBehaviour
         eventOccur = true;
         int random = Random.Range(1, 101);
 
+        /* Solo per scopo di Test */
+        random = 99;
+        /* Solo per scopo di Test */
+
         Debug.Log("Random: "+random);
 
         if(random > 0 && random <= 25)
@@ -113,26 +131,10 @@ public class DungeonArea : MonoBehaviour
             Debug.Log("TrainerEncounter");
             eventOccur = false;
         }
-        else if (random > 60 && random <= 90)
+        else if (random > 60 && random <= 100)
         {
             //mostro normale
-            transitioning = true;
-            Debug.Log("Monster encounter");
-            var monster = area.GetRandomWildMonster();
-            Debug.Log(monster.ToString());
-            yield return TransitionIN();
-            yield return new WaitUntil(() => transitioning == false);
-            yield return GameController.Instance.StartBattleCorutine(monster);
-            transitionAnim.Play("idle");
-            yield return new WaitForSeconds(1f);
-            yield return new WaitUntil(() => GameController.Instance.State != GameState.Battle && GameController.Instance.State != GameState.Evolution);
-            eventOccur = false;
-        }
-        else if (random > 90 && random <= 100)
-        {
-            //mostro raro
-            Debug.Log("Rare Monster encounter");
-            eventOccur = false;
+            yield return CheckRareMonsterEncounter();
         }
 
         yield return null;
@@ -145,19 +147,65 @@ public class DungeonArea : MonoBehaviour
         transitioning = false;
     }
 
-    void CheckRareMonsterEncounter()
+    public void BattleOver()
+    {
+        commonEncounterAudio.gameObject.SetActive(false);
+        rareEncounterAudio.gameObject.SetActive(false);
+        adventureAudio.gameObject.SetActive(true);
+        adventureAudio.Resume();
+    }
+
+    IEnumerator CheckRareMonsterEncounter()
     {
         int random = Random.Range(1, 101);
+
+        /* Solo per scopo di Test */
+        random = 99;
+        /* Solo per scopo di Test */
 
         Debug.Log("RandomEncounter: " + random);
 
         if(random >= 0 && random <= 95)
         {
+            transitioning = true;
             Debug.Log("Monster encounter");
+            var monster = area.GetRandomWildMonster();
+            Debug.Log(monster.ToString());
+            preTransitionCommon.SetActive(true);
+            adventureAudio.Pause();
+            //adventureAudio.gameObject.SetActive(false);
+            commonEncounterAudio.gameObject.SetActive(true);
+            commonEncounterAudio.ResetAndPlay();
+            yield return new WaitForSeconds(3f);
+            yield return TransitionIN();
+            yield return new WaitUntil(() => transitioning == false);
+            preTransitionCommon.SetActive(false);
+            yield return GameController.Instance.StartBattleCorutine(monster);
+            transitionAnim.Play("idle");
+            yield return new WaitForSeconds(1f);
+            yield return new WaitUntil(() => GameController.Instance.State != GameState.Battle && GameController.Instance.State != GameState.Evolution);
+            eventOccur = false;
         }
         else
         {
+            transitioning = true;
             Debug.Log("Rare Monster encounter");
+            var monster = area.GetRandomRareWildMonster();
+            Debug.Log(monster.ToString());
+            preTransitionRare.SetActive(true);
+            adventureAudio.Pause();
+            //adventureAudio.gameObject.SetActive(false);
+            rareEncounterAudio.gameObject.SetActive(true);
+            rareEncounterAudio.ResetAndPlay();
+            yield return new WaitForSeconds(6f);
+            yield return TransitionIN();
+            yield return new WaitUntil(() => transitioning == false);
+            preTransitionRare.SetActive(false);
+            yield return GameController.Instance.StartBattleCorutine(monster);
+            transitionAnim.Play("idle");
+            yield return new WaitForSeconds(1f);
+            yield return new WaitUntil(() => GameController.Instance.State != GameState.Battle && GameController.Instance.State != GameState.Evolution);
+            eventOccur = false;
         }
     }
 

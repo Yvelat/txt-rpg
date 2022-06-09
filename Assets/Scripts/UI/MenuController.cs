@@ -12,9 +12,16 @@ public class MenuController : MonoBehaviour
     [SerializeField] GameObject adventuring;
     [SerializeField] GameObject partyScreen;
     [SerializeField] GameObject inventoryScreen;
+    [SerializeField] SingleAudioManager mainMenuMusic;
 
     public event Action<int> onMenuSelected;
     public event Action onBack;
+
+    private void Start()
+    {
+        mainMenuMusic.gameObject.SetActive(true);
+        mainMenuMusic.ResetAndPlay();
+    }
 
     public void OpenMenu()
     {

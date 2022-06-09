@@ -13,17 +13,28 @@ public class Dungeon : ScriptableObject
     [SerializeField] List<MonsterEncounterRecord> rareWildMonsters;
 
     [HideInInspector]
-    [SerializeField] int totalChance = 0;
+    [SerializeField] int totalChanceCommon = 0;
+    [HideInInspector]
+    [SerializeField] int totalChanceRare = 0;
 
     private void OnValidate()
     {
-        totalChance = 0;
+        totalChanceCommon = 0;
         foreach (var record in wildMonsters)
         {
-            record.chanceLower = totalChance;
-            record.chanceUpper = totalChance + record.chancePercentage;
+            record.chanceLower = totalChanceCommon;
+            record.chanceUpper = totalChanceCommon + record.chancePercentage;
 
-            totalChance = totalChance + record.chancePercentage;
+            totalChanceCommon = totalChanceCommon + record.chancePercentage;
+        }
+
+        totalChanceRare = 0;
+        foreach (var record in rareWildMonsters)
+        {
+            record.chanceLower = totalChanceRare;
+            record.chanceUpper = totalChanceRare + record.chancePercentage;
+
+            totalChanceRare = totalChanceRare + record.chancePercentage;
         }
     }
 

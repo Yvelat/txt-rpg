@@ -20,4 +20,9 @@ MonoBehaviour:
   - monster: {fileID: 11400000, guid: b63c7efc1f2e66840a2362f1e2c353b9, type: 2}
     levelRange: {x: 4, y: 0}
     chancePercentage: 50
-  totalChance: 100
+  rareWildMonsters:
+  - monster: {fileID: 11400000, guid: b63c7efc1f2e66840a2362f1e2c353b9, type: 2}
+    levelRange: {x: 5, y: 0}
+    chancePercentage: 100
+  totalChanceCommon: 100
+  totalChanceRare: 100

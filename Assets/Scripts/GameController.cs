@@ -65,10 +65,10 @@ public class GameController : MonoBehaviour
                 state = prevState;
         };
 
-        menuController.onBack += () =>
+        /*menuController.onBack += () =>
         {
             state = GameState.FreeRoam;
-        };
+        };*/
 
         menuController.onMenuSelected += OnMenuSelected;
 
@@ -175,6 +175,8 @@ public class GameController : MonoBehaviour
         state = GameState.FreeRoam;
         battleSystem.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
+
+        dungeonArea.BattleOver();
 
         var playerParty = playerController.GetComponent<MonsterParty>();
         StartCoroutine(playerParty.CheckForEvolutions());

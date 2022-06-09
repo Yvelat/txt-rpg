@@ -19,6 +19,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] Image trainerImage;
     [SerializeField] GameObject captureDevice;
     [SerializeField] MoveSelectionUI moveSelectionUI;
+    [SerializeField] ActionSelector actionSelector;
     [SerializeField] InventoryUI inventoryUI;
 
     [Header("CaptureDevice")]
@@ -551,6 +552,7 @@ public class BattleSystem : MonoBehaviour
             Action onBack = () =>
             {
                 inventoryUI.gameObject.SetActive(false);
+                actionSelector.gameObject.SetActive(true);
                 state = BattleState.ActionSelection;
             };
 
