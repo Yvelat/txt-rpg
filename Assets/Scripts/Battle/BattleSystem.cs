@@ -26,6 +26,13 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] Transform captureEndPosition;
     [SerializeField] Transform captureDeviceHost;
 
+    [Header("Transition")]
+    [SerializeField] GameObject transition;
+    [SerializeField] Animator transitionAnim;
+
+
+    bool transitioning = false;
+
     public event Action<bool> OnBattleOver;
 
     BattleState state;
@@ -76,10 +83,20 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(SetupBattle());
     }
 
+    IEnumerator TransitionOUT()
+    {
+        transitionAnim.Play("FadeOUT");
+        yield return new WaitForSeconds(0.22f);
+        transitioning = false;
+    }
+
     public IEnumerator SetupBattle()
     {
         playerUnit.Clear();
         enemyUnit.Clear();
+        transitioning = true;
+        yield return TransitionOUT();
+        yield return new WaitUntil(() => transitioning == false);
 
         if (!isTrainerBattle)
         {
@@ -131,6 +148,7 @@ public class BattleSystem : MonoBehaviour
         playerParty.Monsters.ForEach(p => p.OnBattleOver());
         playerUnit.Hud.ClearData();
         enemyUnit.Hud.ClearData();
+        transitionAnim.Play("idleIN");
         OnBattleOver(won);
     }
 

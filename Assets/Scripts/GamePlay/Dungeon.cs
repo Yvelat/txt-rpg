@@ -9,6 +9,8 @@ public class Dungeon : ScriptableObject
 
     [Header("Monster Encounters")]
     [SerializeField] List<MonsterEncounterRecord> wildMonsters;
+    [Header("Rare Monster Encounters")]
+    [SerializeField] List<MonsterEncounterRecord> rareWildMonsters;
 
     [HideInInspector]
     [SerializeField] int totalChance = 0;
@@ -28,6 +30,11 @@ public class Dungeon : ScriptableObject
     public List<MonsterEncounterRecord> WildEncounters
     {
         get { return wildMonsters; }
+    }
+
+    public List<MonsterEncounterRecord> RareWildMonsters
+    {
+        get { return rareWildMonsters; }
     }
 
     public string Name

@@ -11,6 +11,7 @@ public class BattleHud : MonoBehaviour
     [SerializeField] TextMeshProUGUI monsterLevelText;
     [SerializeField] Image statusBack;
     [SerializeField] Image actualStatus;
+    [SerializeField] Image BattleIcon;
     [SerializeField] HPBar hpBar;
     [SerializeField] STBar stBar;
     [SerializeField] Image xpBar;
@@ -36,6 +37,8 @@ public class BattleHud : MonoBehaviour
         hpBar.SetHp((float)monster.HP / monster.MaxHp);
         stBar.SetStamina((float)monster.Stamina / monster.MaxStamina);
         SetXP();
+
+        BattleIcon.sprite = monster.Base.BattleIcon;
 
         statusSrites = new Dictionary<ConditionID, Sprite>()
         {

@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
     [SerializeField] PartyScreen partyScreen;
     [SerializeField] InventoryUI inventoryUI;
     [SerializeField] DungeonArea dungeonArea;
+    [SerializeField] GameObject menuChoices;
 
     TrainerController trainer;
 
@@ -101,8 +102,18 @@ public class GameController : MonoBehaviour
 
     public void StartSearching()
     {
-        dungeonArea.searching = true;
-        StartCoroutine(dungeonArea.Search());
+        if (playerController.HasEnergy())
+        {
+            dungeonArea.searching = true;
+            playerController.UseEnergy(1);
+            StartCoroutine(dungeonArea.Search());
+        }
+        
+    }
+
+    public void OpenMenu()
+    {
+        menuChoices.SetActive(true);
     }
 
     public IEnumerator StartBattleCorutine(Monster wildMonster)

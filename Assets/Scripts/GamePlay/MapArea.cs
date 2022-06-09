@@ -6,10 +6,12 @@ using UnityEngine;
 public class MapArea : MonoBehaviour
 {
     List<MonsterEncounterRecord> wildMonsters;
+    List<MonsterEncounterRecord> rareWildMonsters;
 
-    public void SetEncounterList(List<MonsterEncounterRecord> list)
+    public void SetEncounterList(List<MonsterEncounterRecord> wild, List<MonsterEncounterRecord> rareWild)
     {
-        wildMonsters = list;
+        wildMonsters = wild;
+        rareWildMonsters = rareWild;
     }
 
     public Monster GetRandomWildMonster()
@@ -27,6 +29,23 @@ public class MapArea : MonoBehaviour
         wildMonster.Init();
         return wildMonster;
     }
+
+    public Monster GetRandomRareWildMonster()
+    {
+
+        int randVal = Random.Range(1, 101);
+
+        var monsterRecord = rareWildMonsters.First(m => randVal >= m.chanceLower && randVal <= m.chanceUpper);
+
+        var levelRange = monsterRecord.levelRange;
+
+        int level = levelRange.y == 0 ? levelRange.x : Random.Range(levelRange.x, levelRange.y + 1);
+
+        var wildMonster = new Monster(monsterRecord.monster, level);
+        wildMonster.Init();
+        return wildMonster;
+    }
+
 }
 
 [System.Serializable]

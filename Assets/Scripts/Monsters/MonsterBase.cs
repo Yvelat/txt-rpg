@@ -151,6 +151,11 @@ public class MonsterBase : ScriptableObject
         get { return learnableMoves; }
     }
 
+    public Sprite BattleIcon
+    {
+        get { return battleIcon; }
+    }
+
     public List<MoveBase> LernableByItems => lernableByItems;
     public List<Evolution> Evolutions => evolutions;
 

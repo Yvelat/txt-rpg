@@ -9,6 +9,7 @@ public class PartyMemberUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI monsterNameText;
     [SerializeField] TextMeshProUGUI monsterLevelText;
+    [SerializeField] Image monsterIcon;
     [SerializeField] HPBar hpBar;
     [SerializeField] STBar stBar;
     [SerializeField] TextMeshProUGUI messageText;
@@ -27,6 +28,7 @@ public class PartyMemberUI : MonoBehaviour
 
     void UpdateData()
     {
+        monsterIcon.sprite = _monster.Base.BattleIcon;
         monsterNameText.text = _monster.Base.Name;
         monsterLevelText.text = "Lvl. " + _monster.Level;
         hpBar.SetHp((float)_monster.HP / _monster.MaxHp);

@@ -24,7 +24,7 @@ public class DungeonButton : MonoBehaviour
     {
         adventuring.SetActive(true);
         adventuring.GetComponent<DungeonArea>().SetDungeon(dungeon);
-        GameController.Instance.StartSearching();
+        //GameController.Instance.StartSearching();
         dungeonSelector.SetActive(false);
     }
 
