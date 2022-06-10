@@ -11,11 +11,15 @@ public class Dungeon : ScriptableObject
     [SerializeField] List<MonsterEncounterRecord> wildMonsters;
     [Header("Rare Monster Encounters")]
     [SerializeField] List<MonsterEncounterRecord> rareWildMonsters;
+    [Header("DropsWalking")]
+    [SerializeField] List<Drop> drops;
 
     [HideInInspector]
     [SerializeField] int totalChanceCommon = 0;
     [HideInInspector]
     [SerializeField] int totalChanceRare = 0;
+    [HideInInspector]
+    [SerializeField] int totalChanceDrops = 0;
 
     private void OnValidate()
     {
@@ -36,6 +40,15 @@ public class Dungeon : ScriptableObject
 
             totalChanceRare = totalChanceRare + record.chancePercentage;
         }
+
+        totalChanceDrops = 0;
+        foreach (var record in drops)
+        {
+            record.chanceLower = totalChanceDrops;
+            record.chanceUpper = totalChanceDrops + record.chancePercentage;
+
+            totalChanceDrops = totalChanceDrops + record.chancePercentage;
+        }
     }
 
     public List<MonsterEncounterRecord> WildEncounters
@@ -46,6 +59,11 @@ public class Dungeon : ScriptableObject
     public List<MonsterEncounterRecord> RareWildMonsters
     {
         get { return rareWildMonsters; }
+    }
+
+    public List<Drop> Drops
+    {
+        get { return drops; }
     }
 
     public string Name

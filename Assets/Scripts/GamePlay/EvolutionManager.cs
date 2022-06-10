@@ -8,6 +8,7 @@ public class EvolutionManager : MonoBehaviour
 {
     [SerializeField] GameObject evolutionUI;
     [SerializeField] Image monsterImage;
+    [SerializeField] GameObject EvoEffect;
 
     public event Action OnStartEvolution;
     public event Action OnCompleteEvolution;
@@ -26,6 +27,8 @@ public class EvolutionManager : MonoBehaviour
 
         monsterImage.sprite = monster.Base.FrontSprite;
         yield return DialogManager.Instance.ShowDialodText($"{monster.Base.Name} si sta evolvendo!");
+
+        yield return new WaitForSeconds(5f);
 
         var oldMonster = monster.Base;
         monster.Evolve(evolution);

@@ -16,6 +16,8 @@ public class BattleHud : MonoBehaviour
     [SerializeField] STBar stBar;
     [SerializeField] Image xpBar;
 
+    [SerializeField] TextMeshProUGUI rarityText;
+
     [SerializeField] Sprite psn;
     [SerializeField] Sprite brn;
     [SerializeField] Sprite slp;
@@ -37,6 +39,7 @@ public class BattleHud : MonoBehaviour
         hpBar.SetHp((float)monster.HP / monster.MaxHp);
         stBar.SetStamina((float)monster.Stamina / monster.MaxStamina);
         SetXP();
+        SetRarity(monster.Base.Rarity);
 
         BattleIcon.sprite = monster.Base.BattleIcon;
 
@@ -73,6 +76,42 @@ public class BattleHud : MonoBehaviour
     public void SetLevel()
     {
         monsterLevelText.text = $"Lvl: {_monster.Level}";
+    }
+
+    void SetRarity(Rarity rarity)
+    {
+        if (rarityText == null) return;
+
+        rarityText.color = Color.white;
+
+        switch (rarity)
+        {
+            case Rarity.Common:
+                rarityText.text = "Comune";
+                rarityText.colorGradientPreset = GlobalSettings.i.CommonColor;
+                break;
+            case Rarity.Uncommon:
+                rarityText.text = "Non Comune";
+                rarityText.colorGradientPreset = GlobalSettings.i.UncommonColor;
+                break;
+            case Rarity.Rare:
+                rarityText.text = "Raro";
+                rarityText.colorGradientPreset = GlobalSettings.i.RareColor;
+                break;
+            case Rarity.UltraRare:
+                rarityText.text = "Ultra Raro";
+                rarityText.colorGradientPreset = GlobalSettings.i.UltraRareColor;
+                break;
+            case Rarity.Epic:
+                rarityText.text = "Epico";
+                rarityText.colorGradientPreset = GlobalSettings.i.EpicColor;
+                break;
+            case Rarity.Legendary:
+                rarityText.text = "Leggendario";
+                rarityText.colorGradientPreset = GlobalSettings.i.LegendaryColor;
+                break;
+        }
+
     }
 
     public void SetXP()

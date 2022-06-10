@@ -22,6 +22,7 @@ public class DungeonArea : MonoBehaviour
 
     Dungeon dungeon;
     Animator transitionAnim;
+    Inventory inventory;
 
     public bool searching = false;
     bool eventOccur = false;
@@ -41,6 +42,11 @@ public class DungeonArea : MonoBehaviour
         transition.SetActive(false);
     }
 
+    private void Awake()
+    {
+        inventory = FindObjectOfType<PlayerController>().GetComponent<Inventory>();
+    }
+
     private void Start()
     {
         transitionAnim = transition.GetComponent<Animator>();
@@ -58,7 +64,7 @@ public class DungeonArea : MonoBehaviour
 
     public void InitializeAreaWildEncounters()
     {
-        area.SetEncounterList(dungeon.WildEncounters, dungeon.RareWildMonsters);
+        area.SetData(dungeon);
     }
 
     public void HandleUpdate()
@@ -72,6 +78,7 @@ public class DungeonArea : MonoBehaviour
         if (searching)
         {
             buttons.SetActive(false);
+            infoText.text = "";
             float randomWait = Random.Range(3, 6);
             Debug.Log($"sarted: {randomWait}");
             yield return new WaitForSeconds(randomWait);
@@ -121,8 +128,10 @@ public class DungeonArea : MonoBehaviour
         else if(random > 25 && random <= 45)
         {
             //oggetto
-            Debug.Log("Object");
-            infoText.text = "Hai trovato un oggetto!";
+            DropTableElement drop = area.GetRandomDrop();
+            inventory.AddItem(drop.drop.Item, drop.count);
+            Debug.Log($"Object: {drop.drop.Item.Name} x{drop.count}");
+            infoText.text = $"Hai trovato {drop.count} {drop.drop.Item.Name}!";
             eventOccur = false;
         }
         else if (random > 45 && random <= 60)

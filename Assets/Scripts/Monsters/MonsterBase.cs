@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Monster", menuName = "Monster/Crea nuovo Monster")]
@@ -33,7 +34,93 @@ public class MonsterBase : ScriptableObject
 
     [SerializeField] List<Evolution> evolutions;
 
+    [Header("DropTable")]
+    [SerializeField] Vector2Int coinsRange;
+    [SerializeField] Vector2Int gemsRange;
+    [SerializeField] Vector2Int dropNumber;
+    [SerializeField] List<Drop> drops;
+
+    [HideInInspector]
+    [SerializeField] int totalChance = 0;
+
     public static int MaxNumOfMoves { get; set; } = 4;
+
+    private void OnValidate()
+    {
+        totalChance = 0;
+        foreach (var record in drops)
+        {
+            record.chanceLower = totalChance;
+            record.chanceUpper = totalChance + record.chancePercentage;
+
+            totalChance = totalChance + record.chancePercentage;
+        }
+    }
+
+    public DropTable GetDrops(int level)
+    {
+        int droprange = dropNumber.y == 0 ? dropNumber.x : Random.Range(dropNumber.x, dropNumber.y + 1);
+
+        DropTable dropsToGive = new DropTable();
+
+        dropsToGive.coins = CalculateCoinsToGive(level);
+        dropsToGive.gems = CalculateGemsToGive();
+
+        List<DropTableElement> dropGetted = new List<DropTableElement>();
+
+        for (int i = 0; i < droprange; i++)
+        {
+            DropTableElement randomDrop = GetRandomDrop();
+
+            DropTableElement dropEqual = dropGetted.First(dr => dr.drop.Item.Name == randomDrop.drop.Item.Name);
+
+            if(dropEqual != null)
+            {
+                dropGetted.Remove(dropEqual);
+
+                dropEqual.count += randomDrop.count;
+
+                dropGetted.Add(dropEqual);
+            }
+            else
+            {
+                dropGetted.Add(randomDrop);
+            }
+        }
+
+        dropsToGive.dropList = dropGetted;
+
+        return dropsToGive;
+
+    }
+
+    int CalculateCoinsToGive(int level)
+    {
+        int coins = coinsRange.y == 0 ? coinsRange.x : Random.Range(coinsRange.x, coinsRange.y + 1);
+
+        return ((coins * 10) * level) / 20;
+    }
+
+    int CalculateGemsToGive()
+    {
+        return gemsRange.y == 0 ? gemsRange.x : Random.Range(gemsRange.x, gemsRange.y + 1);
+    }
+
+    DropTableElement GetRandomDrop()
+    {
+        DropTableElement dropElement = new DropTableElement();
+
+        int randVal = Random.Range(1, 101);
+
+        Drop drop = drops.First(m => randVal >= m.chanceLower && randVal <= m.chanceUpper);
+
+        int count = drop.amount.y == 0 ? drop.amount.x : Random.Range(drop.amount.x, drop.amount.y + 1);
+
+        dropElement.drop = drop;
+        dropElement.count = count;
+
+        return dropElement;
+    }
 
     public int GetXPForLevel(int level)
     {
@@ -239,6 +326,32 @@ public enum Rarity
     UltraRare,
     Epic,
     Legendary
+}
+
+[System.Serializable]
+public class Drop
+{
+    [SerializeField] ItemBase item;
+    public Vector2Int amount;
+    public int chancePercentage;
+
+    public int chanceLower { get; set; }
+    public int chanceUpper { get; set; }
+
+    public ItemBase Item => item;
+}
+
+public class DropTable
+{
+    public int coins;
+    public int gems;
+    public List<DropTableElement> dropList;
+}
+
+public class DropTableElement
+{
+    public Drop drop;
+    public int count;
 }
 
 public class TypeChart

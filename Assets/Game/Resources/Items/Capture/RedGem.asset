@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: RedGem
   description: yes
-  icon: {fileID: 2012276527, guid: 575ff083e8a9efc42b14e0e7ea715a4c, type: 3}
+  icon: {fileID: 21300000, guid: a70a206f073274fb4a0b7e0c12ce8f36, type: 3}
   catchRateModifier: 1

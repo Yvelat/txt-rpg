@@ -7,11 +7,13 @@ public class MapArea : MonoBehaviour
 {
     List<MonsterEncounterRecord> wildMonsters;
     List<MonsterEncounterRecord> rareWildMonsters;
+    List<Drop> drops;
 
-    public void SetEncounterList(List<MonsterEncounterRecord> wild, List<MonsterEncounterRecord> rareWild)
+    public void SetData(Dungeon dungeon)
     {
-        wildMonsters = wild;
-        rareWildMonsters = rareWild;
+        wildMonsters = dungeon.WildEncounters;
+        rareWildMonsters = dungeon.RareWildMonsters;
+        drops = dungeon.Drops;
     }
 
     public Monster GetRandomWildMonster()
@@ -32,6 +34,7 @@ public class MapArea : MonoBehaviour
 
     public Monster GetRandomRareWildMonster()
     {
+        // From UltraRare To Legendary?
 
         int randVal = Random.Range(1, 101);
 
@@ -44,6 +47,26 @@ public class MapArea : MonoBehaviour
         var wildMonster = new Monster(monsterRecord.monster, level);
         wildMonster.Init();
         return wildMonster;
+    }
+
+    public DropTableElement GetRandomDrop()
+    {
+        //From Common To Rare
+
+        int randVal = Random.Range(1, 101);
+
+        DropTableElement dropToGive = new DropTableElement();
+
+        var drop = drops.First(m => randVal >= m.chanceLower && randVal <= m.chanceUpper);
+
+        var numRange = drop.amount;
+
+        int count = numRange.y == 0 ? numRange.x : Random.Range(numRange.x, numRange.y + 1);
+
+        dropToGive.drop = drop;
+        dropToGive.count = count;
+
+        return dropToGive;
     }
 
 }

@@ -21,4 +21,13 @@ MonoBehaviour:
   staminaCost: 5
   priority: 0
   category: 0
+  effects:
+    boosts: []
+    status: 0
+    volatileStatus: 0
+  secondaries: []
   target: 0
+  canvasEffect: {fileID: 7400000, guid: 5eb5964ad7552654e817549579e32aa7, type: 2}
+  canvasEffectDuration: 0.6
+  particleEffect: {fileID: 0}
+  particleEffectDuration: 0

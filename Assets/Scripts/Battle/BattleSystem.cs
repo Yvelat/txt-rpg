@@ -21,6 +21,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] MoveSelectionUI moveSelectionUI;
     [SerializeField] ActionSelector actionSelector;
     [SerializeField] InventoryUI inventoryUI;
+    [SerializeField] MoveEffectManager moveEffectManager;
 
     [Header("CaptureDevice")]
     [SerializeField] Transform captureStartPosition;
@@ -315,6 +316,22 @@ public class BattleSystem : MonoBehaviour
                 {
                     sourceUnit.PlayAttackAnimation();
                     yield return new WaitForSeconds(1f);
+                }
+                else
+                {
+                    Debug.Log("PlayerUnit Attack");
+                    if (move.HasCanvasEffect())
+                    {
+                        Debug.Log("PlayCanvas");
+                        yield return moveEffectManager.PlayCanvasEffect(move.GetCanvasEffect(), move.GetCanvasDuration());
+                    }
+                    else if (move.HasParticleEffect())
+                    {
+                        Debug.Log("PlayParticle");
+                        yield return moveEffectManager.PlayParticleEffect(move.GetParticleEffect(), move.GetParticleDuration());
+                    }
+
+                    yield return new WaitUntil(() => moveEffectManager.isPlaing == false);
                 }
 
                 targetUnit.PlayHitAnimation();

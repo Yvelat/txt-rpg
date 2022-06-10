@@ -30,6 +30,37 @@ public class Move
         };
         return saveData;
     }
+
+    public bool HasCanvasEffect()
+    {
+        return Base.CanvasEffect != null;
+    }
+
+    public bool HasParticleEffect()
+    {
+        return Base.ParticleEffect != null;
+    }
+
+    public AnimationClip GetCanvasEffect()
+    {
+        return Base.CanvasEffect;
+    }
+
+    public GameObject GetParticleEffect()
+    {
+        return Base.ParticleEffect;
+    }
+
+    public float GetParticleDuration()
+    {
+        return Base.ParticleEffectDuration;
+    }
+
+    public float GetCanvasDuration()
+    {
+        return Base.CanvasEffectDuration;
+    }
+
 }
 
 

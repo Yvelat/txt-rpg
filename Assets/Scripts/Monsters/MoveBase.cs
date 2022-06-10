@@ -22,6 +22,13 @@ public class MoveBase : ScriptableObject
     [SerializeField] List<SecondaryEffects> secondaries;
     [SerializeField] MoveTarget target;
 
+    [Header("VisualEffects")]
+    [SerializeField] AnimationClip canvasEffect;
+    [SerializeField] float canvasEffectDuration;
+    [SerializeField] GameObject particleEffect;
+    [SerializeField] float particleEffectDuration;
+
+
     //Proprietà --Inizio--
     public string Name
     {
@@ -73,6 +80,25 @@ public class MoveBase : ScriptableObject
     public MoveTarget Target
     {
         get { return target; }
+    }
+    public GameObject ParticleEffect
+    {
+        get { return particleEffect; }
+    }
+
+    public float CanvasEffectDuration
+    {
+        get { return canvasEffectDuration; }
+    }
+
+    public float ParticleEffectDuration
+    {
+        get { return ParticleEffectDuration; }
+    }
+
+    public AnimationClip CanvasEffect
+    {
+        get { return canvasEffect; }
     }
     //Proprietà --Fine--
 }
