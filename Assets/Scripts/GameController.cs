@@ -222,6 +222,7 @@ public class GameController : MonoBehaviour
             Action onBack = () =>
             {
                 partyScreen.gameObject.SetActive(false);
+                menuChoices.gameObject.SetActive(true);
                 state = GameState.FreeRoam;
             };
 
@@ -232,6 +233,7 @@ public class GameController : MonoBehaviour
             Action onBack = () =>
             {
                 inventoryUI.gameObject.SetActive(false);
+                menuChoices.gameObject.SetActive(true);
                 state = GameState.FreeRoam;
             };
 
@@ -244,6 +246,16 @@ public class GameController : MonoBehaviour
     {
         PrevScene = CurrentScene;
         CurrentScene = currScene;
+    }
+
+    public void SetStateToParty()
+    {
+        state = GameState.PartyScreen;
+    }
+
+    public void SetStateToBag()
+    {
+        state = GameState.Bag;
     }
 
     void OnMenuSelected(int selectedItem)

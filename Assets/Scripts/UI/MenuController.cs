@@ -51,6 +51,7 @@ public class MenuController : MonoBehaviour
         Debug.Log("Inventory Pressed");
         mainMenu.SetActive(false);
         inventoryScreen.SetActive(true);
+        GameController.Instance.SetStateToBag();
     }
 
     public void BtParty()
@@ -58,6 +59,7 @@ public class MenuController : MonoBehaviour
         Debug.Log("Party Pressed");
         mainMenu.SetActive(false);
         partyScreen.SetActive(true);
+        GameController.Instance.SetStateToParty();
     }
 
     public void HandleUpdate()

@@ -3538,7 +3538,7 @@ MonoBehaviour:
   partyScreen: {fileID: 741628980}
   inventoryUI: {fileID: 1444432537}
   dungeonArea: {fileID: 1212361344}
-  menuChoices: {fileID: 0}
+  menuChoices: {fileID: 688790932}
 --- !u!114 &360555933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11963,7 +11963,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Continua a carcare
+  m_text: Torna al menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12461,7 +12461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1371082046
 Transform:
   m_ObjectHideFlags: 0
@@ -20629,7 +20629,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5921468040760596190, guid: 347bc95cc87ca034ebc5889d5c965ffc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.000000055235436
+      value: 0.59426856
       objectReference: {fileID: 0}
     - target: {fileID: 5921468040760596190, guid: 347bc95cc87ca034ebc5889d5c965ffc, type: 3}
       propertyPath: m_AnchorMin.y
