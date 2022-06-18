@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2ddafeb9284c74eb2fab8fd579f62d, type: 3}
+  m_Name: Oskstoi
+  m_EditorClassIdentifier: 
+  monsterName: Oskstoi
+  description: bho
+  frontSprite: {fileID: 21300000, guid: bd2d1516b2801ae45860bb7dee1639e9, type: 3}
+  battleIcon: {fileID: 0}
+  type: 7
+  rarity: 0
+  maxHp: 30
+  attack: 35
+  defense: 30
+  speed: 80
+  stamina: 100
+  xpYield: 62
+  growthRate: 3
+  catchRate: 160
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 89bee615849bc6e47b162f50e8981785, type: 2}
+    level: 1
+  lernableByItems: []
+  evolutions:
+  - evolvesInto: {fileID: 11400000, guid: d745c1d6d157dc54f9cc429a2679e5bc, type: 2}
+    requiredLevel: 25
+    requiredItem: {fileID: 0}
+  coinsRange: {x: 0, y: 0}
+  gemsRange: {x: 0, y: 0}
+  dropNumber: {x: 0, y: 0}
+  drops: []
+  totalChance: 0
