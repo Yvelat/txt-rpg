@@ -4632,7 +4632,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 50.000034, y: -175}
+  m_AnchoredPosition: {x: 50.00003, y: -175}
   m_SizeDelta: {x: -100, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &438772267
@@ -13537,7 +13537,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 50.000034, y: -255}
+  m_AnchoredPosition: {x: 50.00003, y: -255}
   m_SizeDelta: {x: -100, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1379085693
@@ -19508,7 +19508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d9636d9a25a0814fb953b9d1014840c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: ciao
+  playerName: Yvelat
   coinsText: {fileID: 473496025}
   gemsText: {fileID: 1877435248}
   energyText: {fileID: 1646178563}
@@ -19539,7 +19539,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34c5f29319bd4a4fa7b46e5b499d2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots: []
+  slots:
+  - item: {fileID: 11400000, guid: 9027b274c799e12468bf3633c569f353, type: 2}
+    count: 5
   captureDeviceSlots:
   - item: {fileID: 11400000, guid: e42fa67923f01d64e86cef5ea7c136a5, type: 2}
     count: 10

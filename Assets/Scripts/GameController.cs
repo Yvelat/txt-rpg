@@ -286,5 +286,23 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void AddCoinsToPlayer(int amount)
+    {
+        int coins = playerController.Coins;
+
+        coins += amount;
+
+        playerController.SetCoins(coins);
+    }
+
+    public void AddGemsToPlayer(int amount)
+    {
+        int gems = playerController.Gems;
+
+        gems += amount;
+
+        playerController.SetGems(gems);
+    }
+
     public GameState State => state;
 }

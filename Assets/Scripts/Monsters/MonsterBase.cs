@@ -98,6 +98,7 @@ public class MonsterBase : ScriptableObject
     {
         int coins = coinsRange.y == 0 ? coinsRange.x : Random.Range(coinsRange.x, coinsRange.y + 1);
 
+        //TODO: better coin calculation
         return ((coins * 10) * level) / 20;
     }
 

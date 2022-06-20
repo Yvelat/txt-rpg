@@ -95,6 +95,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //TODO: rivedere calcolo energia
     void SetEnergyBasedOnLevel()
     {
         energy = 25 + (3 * levl);
@@ -111,6 +112,16 @@ public class PlayerController : MonoBehaviour
     void SetName(string Name)
     {
         playerName = Name;
+    }
+
+    public void SetCoins(int coins)
+    {
+        this.coins = coins;
+    }
+
+    public void SetGems(int gems)
+    {
+        this.gems = gems;
     }
 
     public string Name

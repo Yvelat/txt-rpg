@@ -30,6 +30,8 @@ public class MoveEffectManager : MonoBehaviour
         isPlaing = false;
     }
 
+    //TODO: Meglio rimuovere queste due funzioni?
+
     public bool HasCanvasEffect(Move move)
     {
         return move.HasCanvasEffect();
