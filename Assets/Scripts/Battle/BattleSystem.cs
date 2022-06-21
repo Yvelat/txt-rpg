@@ -23,6 +23,9 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] InventoryUI inventoryUI;
     [SerializeField] MoveEffectManager moveEffectManager;
 
+    [Header("BattleResult")]
+    [SerializeField] BattleResultUi battleResultUi;
+
     [Header("CaptureDevice")]
     [SerializeField] Transform captureStartPosition;
     [SerializeField] Transform captureEndPosition;

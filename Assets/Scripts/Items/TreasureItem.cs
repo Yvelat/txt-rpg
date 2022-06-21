@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Crea nuovo item Tesoro")]
@@ -19,6 +20,7 @@ public class TreasureItem : ItemBase
 
     private void OnValidate()
     {
+        //TODO: aggiungere controllo percentuale?
         totalChance = 0;
         foreach (var record in drops)
         {
@@ -29,7 +31,7 @@ public class TreasureItem : ItemBase
         }
     }
 
-    public override bool Use(Monster monster)
+    public override bool Use(Monster monster, Inventory inv)
     {
         if(monster != null) return false;
 
@@ -54,14 +56,32 @@ public class TreasureItem : ItemBase
 
         }
 
-        //TODO: drops
-
         if(drops.Count > 0 && totalChance == 100)
         {
+            DropTableElement drop = GetRandomDrop();
 
+            inv.AddItem(drop.drop.Item, drop.count);
+
+            return true;
         }
 
         return true;
+    }
+
+    DropTableElement GetRandomDrop()
+    {
+        DropTableElement dropElement = new DropTableElement();
+
+        int randVal = Random.Range(1, 101);
+
+        Drop drop = drops.First(m => randVal >= m.chanceLower && randVal <= m.chanceUpper);
+
+        int count = drop.amount.y == 0 ? drop.amount.x : Random.Range(drop.amount.x, drop.amount.y + 1);
+
+        dropElement.drop = drop;
+        dropElement.count = count;
+
+        return dropElement;
     }
 
     public override bool CanUseInBattle => false;

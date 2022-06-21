@@ -40,6 +40,10 @@ public class DungeonArea : MonoBehaviour
     private void OnDisable()
     {
         transition.SetActive(false);
+        adventureAudio.Stop();
+        adventureAudio.gameObject.SetActive(false);
+        menuAudio.gameObject.SetActive(true);
+        menuAudio.ResetAndPlay();
     }
 
     private void Awake()
@@ -127,7 +131,7 @@ public class DungeonArea : MonoBehaviour
         }
         else if(random > 25 && random <= 45)
         {
-            //oggetto
+            //oggetto o soldi
             DropTableElement drop = area.GetRandomDrop();
             inventory.AddItem(drop.drop.Item, drop.count);
             Debug.Log($"Object: {drop.drop.Item.Name} x{drop.count}");

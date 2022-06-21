@@ -5,6 +5,7 @@ using UnityEngine;
 public class ItemBase : ScriptableObject
 {
     [SerializeField] string itemName;
+    [TextArea]
     [SerializeField] string description;
     [SerializeField] Sprite icon;
 
@@ -13,6 +14,11 @@ public class ItemBase : ScriptableObject
     public Sprite Icon => icon;
 
     public virtual bool Use(Monster monster)
+    {
+        return false;
+    }
+
+    public virtual bool Use(Monster monster, Inventory inv)
     {
         return false;
     }
