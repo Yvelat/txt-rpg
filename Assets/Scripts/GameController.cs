@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     [SerializeField] InventoryUI inventoryUI;
     [SerializeField] DungeonArea dungeonArea;
     [SerializeField] GameObject menuChoices;
+    [SerializeField] TreasureUi treasureUI;
 
     TrainerController trainer;
 
@@ -302,6 +303,18 @@ public class GameController : MonoBehaviour
         gems += amount;
 
         playerController.SetGems(gems);
+    }
+
+    public void OpenTreasureUI(int value, TreasureType type)
+    {
+        treasureUI.gameObject.SetActive(true);
+        treasureUI.SetData(value, type);
+    }
+
+    public void OpenTreasureUI(DropTableElement drop)
+    {
+        treasureUI.gameObject.SetActive(true);
+        treasureUI.SetData(drop);
     }
 
     public GameState State => state;

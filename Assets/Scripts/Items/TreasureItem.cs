@@ -41,6 +41,7 @@ public class TreasureItem : ItemBase
             int coins = coinsRange.y == 0 ? coinsRange.x : Random.Range(coinsRange.x, coinsRange.y + 1);
 
             GameController.Instance.AddCoinsToPlayer(coins);
+            GameController.Instance.OpenTreasureUI(coins, TreasureType.Coin);
 
             return true;
         }
@@ -51,6 +52,7 @@ public class TreasureItem : ItemBase
             int gems = gemRange.y == 0 ? gemRange.x : Random.Range(gemRange.x, gemRange.y + 1);
 
             GameController.Instance.AddGemsToPlayer(gems);
+            GameController.Instance.OpenTreasureUI(gems, TreasureType.Gem);
 
             return true;
 
@@ -61,6 +63,7 @@ public class TreasureItem : ItemBase
             DropTableElement drop = GetRandomDrop();
 
             inv.AddItem(drop.drop.Item, drop.count);
+            GameController.Instance.OpenTreasureUI(drop);
 
             return true;
         }

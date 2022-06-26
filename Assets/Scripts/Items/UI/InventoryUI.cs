@@ -27,6 +27,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] GameObject RightButton;
     [SerializeField] GameObject LeftButton;
 
+    [SerializeField] TreasureUi treasureUi;
+
     Action<ItemBase> OnItemUsed;
     Action onBack;
 
@@ -305,7 +307,8 @@ public class InventoryUI : MonoBehaviour
 
             if (usedItem is TreasureItem)
             {
-                //TODO: trasure item opening UI logic
+                yield return new WaitUntil(() => treasureUi.confirm == true);
+                treasureUi.gameObject.SetActive(false);
                 state = InventoryUIState.ItemSelection;
                 yield break;
             }
