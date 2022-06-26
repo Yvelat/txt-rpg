@@ -12,8 +12,12 @@ public class BattleResultUi : MonoBehaviour
 
     [SerializeField] GameObject DropElementPrefab;
 
+    [HideInInspector]
+    public bool exitPressed = false;
+
     public void SetData(bool win, DropTable table)
     {
+        exitPressed = false;
         winText.text = (win) ? "Hai Vinto!" : "Hai Perso";
         coinText.text = table.coins.ToString();
         gemText.text = table.gems.ToString();
@@ -22,6 +26,10 @@ public class BattleResultUi : MonoBehaviour
 
     public void SetDropList(List<DropTableElement> drops)
     {
+        foreach (Transform child in DropList.transform)
+        {
+            Destroy(child.gameObject);
+        }
 
         foreach (DropTableElement drop in drops)
         {
@@ -30,6 +38,11 @@ public class BattleResultUi : MonoBehaviour
             obj.GetComponent<DropItemUiElement>().SetData(drop);
         }
 
+    }
+
+    public void ConfirmButton()
+    {
+        exitPressed = true;
     }
 
 }

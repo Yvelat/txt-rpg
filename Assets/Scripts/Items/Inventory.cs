@@ -52,7 +52,11 @@ public class Inventory : MonoBehaviour, ISavable
 
         var item = GetItem(itemIndex, selectedCategory);
 
-        bool itemUsed = item.Use(selectedMonster);
+        bool itemUsed = false;
+        if (item is TreasureItem)
+            itemUsed = item.Use(selectedMonster, this);
+        else
+            itemUsed = item.Use(selectedMonster);
 
         if (itemUsed)
         {
@@ -63,6 +67,14 @@ public class Inventory : MonoBehaviour, ISavable
         }
 
         return null;
+    }
+
+    public void AddDropTable(DropTable dropTable)
+    {
+        foreach(DropTableElement drop in dropTable.dropList)
+        {
+            AddItem(drop.drop.Item, drop.count);
+        }
     }
 
     public void AddItem(ItemBase item, int count=1)
@@ -114,7 +126,7 @@ public class Inventory : MonoBehaviour, ISavable
 
     ItemCategory GetCategoryFromItem(ItemBase item)
     {
-        if (item is RecoveryItem || item is EvolutionItem)
+        if (item is RecoveryItem || item is EvolutionItem || item is TreasureItem)
             return ItemCategory.Item;
         else if (item is CaptureDeviceItem)
             return ItemCategory.CaptureDevice;

@@ -56,6 +56,8 @@ public class BattleSystem : MonoBehaviour
     int escapeAttempts;
     MoveBase moveToLearn;
 
+    Inventory inventory;
+
     public void StartBattle(MonsterParty playerParty, Monster wildMonster)
     {
         this.playerParty = playerParty;
@@ -147,10 +149,19 @@ public class BattleSystem : MonoBehaviour
 
     }
 
-    void BattleOver(bool won)
+    /*void*/ IEnumerator BattleOver(bool won)
     {
         state = BattleState.BattleOver;
         playerParty.Monsters.ForEach(p => p.OnBattleOver());
+        battleResultUi.gameObject.SetActive(true);
+        DropTable dropTable = enemyUnit.Monster.Base.GetDrops(enemyUnit.Monster.Level);
+        battleResultUi.SetData(won, dropTable);
+        inventory = Inventory.GetInventory();
+        inventory.AddDropTable(dropTable);
+        GameController.Instance.AddCoinsToPlayer(dropTable.coins);
+        GameController.Instance.AddGemsToPlayer(dropTable.gems);
+        yield return new WaitUntil(() => battleResultUi.exitPressed == true);
+        battleResultUi.gameObject.SetActive(false);
         playerUnit.Hud.ClearData();
         enemyUnit.Hud.ClearData();
         transitionAnim.Play("idleIN");
@@ -508,10 +519,10 @@ public class BattleSystem : MonoBehaviour
         }
         //Fine logica degli XP
 
-        CheckForBattleOver(faintedUnit);
+        yield return CheckForBattleOver(faintedUnit);
     }
 
-    void CheckForBattleOver(BattleUnit faintedUnit)
+    /*void*/ IEnumerator CheckForBattleOver(BattleUnit faintedUnit)
     {
         if (faintedUnit.IsPlayerUnit)
         {
@@ -520,22 +531,22 @@ public class BattleSystem : MonoBehaviour
             if (nextMonster != null)
                 OpenPartyScreen();
             else
-                BattleOver(false);
+                yield return BattleOver(false);
         }
         else
         {
             if (!isTrainerBattle)
             {
-                BattleOver(true);
+                yield return BattleOver(true);
             }
             else
             {
                 var nextMonster = trainerParty.GetHealthyMonster();
 
                 if (nextMonster != null)
-                    StartCoroutine(AboutToUse(nextMonster));
+                    yield return AboutToUse(nextMonster);
                 else
-                    BattleOver(true);
+                    yield return BattleOver(true);
             }
         }
             
@@ -907,7 +918,7 @@ public class BattleSystem : MonoBehaviour
 
             //Destroy(captureDev);
             Destroy(cdObj);
-            BattleOver(true);
+            yield return BattleOver(true);
         }
         else
         {
@@ -971,7 +982,7 @@ public class BattleSystem : MonoBehaviour
         if (enemySpeed < playerSpeed)
         {
             yield return dialogBox.TypeDialog("Sei riuscito a fuggire!");
-            BattleOver(true);
+            yield return BattleOver(true);
         }
         else
         {
@@ -981,7 +992,7 @@ public class BattleSystem : MonoBehaviour
             if(UnityEngine.Random.Range(0, 256) < f)
             {
                 yield return dialogBox.TypeDialog("Sei riuscito a fuggire!");
-                BattleOver(true);
+                yield return BattleOver(true);
             }
             else
             {

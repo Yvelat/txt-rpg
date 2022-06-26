@@ -72,7 +72,10 @@ public class MonsterBase : ScriptableObject
         {
             DropTableElement randomDrop = GetRandomDrop();
 
-            DropTableElement dropEqual = dropGetted.First(dr => dr.drop.Item.Name == randomDrop.drop.Item.Name);
+            DropTableElement dropEqual = null;
+
+            if (dropGetted.Count > 0)
+                dropEqual = dropGetted.First(dr => dr.drop.Item.Name == randomDrop.drop.Item.Name);
 
             if(dropEqual != null)
             {

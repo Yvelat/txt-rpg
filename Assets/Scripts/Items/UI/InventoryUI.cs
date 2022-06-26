@@ -255,9 +255,9 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        if(selectedCategory == (int)ItemCategory.CaptureDevice)
+        if(selectedCategory == (int)ItemCategory.CaptureDevice || item is TreasureItem)
         {
-            StartCoroutine(UseItem());
+            yield return UseItem();
         }
         else
         {
@@ -276,7 +276,10 @@ public class InventoryUI : MonoBehaviour
         yield return HandleGrimoireItems();
 
         var item = inventory.GetItem(selectedItem, selectedCategory);
-        var monster = partyScreen.SelectedMember;
+        Monster monster = null;
+
+        if (!(item is TreasureItem))
+            monster = partyScreen.SelectedMember;
 
         //Handle Evolution by Item
         if (item is EvolutionItem)
@@ -294,11 +297,18 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        var usedItem = inventory.UseItem(selectedItem, partyScreen.SelectedMember, selectedCategory);
+        var usedItem = inventory.UseItem(selectedItem, monster, selectedCategory);
         if(usedItem != null)
         {
             if (usedItem is RecoveryItem)
                 yield return DialogManager.Instance.ShowDialodText($"Hai usato {usedItem.Name}");
+
+            if (usedItem is TreasureItem)
+            {
+                //TODO: trasure item opening UI logic
+                state = InventoryUIState.ItemSelection;
+                yield break;
+            }
 
             OnItemUsed?.Invoke(usedItem);
         }
@@ -308,7 +318,8 @@ public class InventoryUI : MonoBehaviour
                 yield return DialogManager.Instance.ShowDialodText($"Non avrebbe nessun effetto");
         }
 
-        ClosePartyScreen();
+        if(!(item is TreasureItem))
+            ClosePartyScreen();
     }
 
     IEnumerator HandleGrimoireItems()
