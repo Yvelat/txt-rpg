@@ -131,7 +131,7 @@ public class DungeonArea : MonoBehaviour
         }
         else if(random > 25 && random <= 45)
         {
-            //oggetto o soldi
+            //oggetto o ?soldi? || ?Soldi tramite oggetto?
             DropTableElement drop = area.GetRandomDrop();
             inventory.AddItem(drop.drop.Item, drop.count);
             Debug.Log($"Object: {drop.drop.Item.Name} x{drop.count}");
@@ -141,7 +141,8 @@ public class DungeonArea : MonoBehaviour
         else if (random > 45 && random <= 60)
         {
             //trainer
-            Debug.Log("TrainerEncounter");
+            // TODO: Add Trainer Encounter
+            Debug.Log("Trainer Encounter");
             eventOccur = false;
         }
         else if (random > 60 && random <= 100)
@@ -180,6 +181,7 @@ public class DungeonArea : MonoBehaviour
 
         if(random >= 0 && random <= 95)
         {
+            // Normal Encounter
             transitioning = true;
             Debug.Log("Monster encounter");
             var monster = area.GetRandomWildMonster();
@@ -201,6 +203,7 @@ public class DungeonArea : MonoBehaviour
         }
         else
         {
+            // Rare Encounter
             transitioning = true;
             Debug.Log("Rare Monster encounter");
             var monster = area.GetRandomRareWildMonster();

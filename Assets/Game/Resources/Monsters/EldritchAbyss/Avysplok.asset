@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2ddafeb9284c74eb2fab8fd579f62d, type: 3}
+  m_Name: Avysplok
+  m_EditorClassIdentifier: 
+  monsterName: Avysplok
+  description: bho
+  frontSprite: {fileID: 21300000, guid: 1c58675401b2cf944be5399b2646f795, type: 3}
+  battleIcon: {fileID: 0}
+  type: 7
+  rarity: 0
+  maxHp: 50
+  attack: 68
+  defense: 60
+  speed: 32
+  stamina: 100
+  xpYield: 62
+  growthRate: 3
+  catchRate: 150
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 89bee615849bc6e47b162f50e8981785, type: 2}
+    level: 1
+  lernableByItems: []
+  evolutions:
+  - evolvesInto: {fileID: 11400000, guid: 417208d3dfbf07145aee43765fd86a09, type: 2}
+    requiredLevel: 41
+    requiredItem: {fileID: 0}
+  coinsRange: {x: 0, y: 0}
+  gemsRange: {x: 0, y: 0}
+  dropNumber: {x: 0, y: 0}
+  drops: []
+  totalChance: 0
