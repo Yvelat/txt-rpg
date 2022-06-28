@@ -12,11 +12,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] TextMeshProUGUI gemsText;
     [SerializeField] TextMeshProUGUI energyText;
 
-    int coins;
-    int gems;
+    int coins = 0;
+    int gems = 0;
     int energy = -1;
-    int levl;
-    int xp;
+    int level = 1;
+    int xp = 0;
 
     int maxEnergy = 25;
 
@@ -98,15 +98,34 @@ public class PlayerController : MonoBehaviour
     //TODO: rivedere calcolo energia
     void SetEnergyBasedOnLevel()
     {
-        energy = 25 + (3 * levl);
+        energy = 25 + (1 * level);
         maxEnergy = energy;
     }
 
     int GetNextLevelXp()
     {
-        int level = levl + 1;
+        int level = this.level + 1;
 
         return level * level * level;
+    }
+
+    public void AddXp(int amount)
+    {
+        xp += amount;
+    }
+
+    public bool CheckLevelUp()
+    {
+        int xpToNextLevel = GetNextLevelXp();
+
+        if( xp >= xpToNextLevel)
+        {
+            xp -= xpToNextLevel;
+            level++;
+            return true;
+        }
+
+        return false;
     }
 
     void SetName(string Name)
@@ -146,7 +165,7 @@ public class PlayerController : MonoBehaviour
 
     public int Levl
     {
-        get => levl;
+        get => level;
     }
 
     public int Xp

@@ -8,6 +8,7 @@ public class BattleResultUi : MonoBehaviour
     [SerializeField] TextMeshProUGUI winText;
     [SerializeField] TextMeshProUGUI coinText;
     [SerializeField] TextMeshProUGUI gemText;
+    [SerializeField] TextMeshProUGUI playerXpText;
     [SerializeField] GameObject DropList;
 
     [SerializeField] GameObject DropElementPrefab;
@@ -15,10 +16,11 @@ public class BattleResultUi : MonoBehaviour
     [HideInInspector]
     public bool exitPressed = false;
 
-    public void SetData(bool win, DropTable table)
+    public void SetData(bool win, DropTable table, int playerXp)
     {
         exitPressed = false;
         winText.text = (win) ? "Hai Vinto!" : "Hai Perso";
+        playerXpText.text = $"Hai guadagnato {playerXp} XP";
         coinText.text = table.coins.ToString();
         gemText.text = table.gems.ToString();
         SetDropList(table.dropList);

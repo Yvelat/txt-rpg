@@ -163,10 +163,16 @@ public class DungeonArea : MonoBehaviour
 
     public void BattleOver()
     {
+        //TODO: Show Player Lvl up screen if is the case
         commonEncounterAudio.gameObject.SetActive(false);
         rareEncounterAudio.gameObject.SetActive(false);
         adventureAudio.gameObject.SetActive(true);
         adventureAudio.Resume();
+
+        if (GameController.Instance.CheckIfPlayerCanLevelUp())
+        {
+            //show UI
+        }
     }
 
     IEnumerator CheckRareMonsterEncounter()

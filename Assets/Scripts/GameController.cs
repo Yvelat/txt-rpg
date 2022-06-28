@@ -305,6 +305,16 @@ public class GameController : MonoBehaviour
         playerController.SetGems(gems);
     }
 
+    public void AddXpToPlayer(int xp)
+    {
+        playerController.AddXp(xp);
+    }
+
+    public bool CheckIfPlayerCanLevelUp()
+    {
+        return playerController.CheckLevelUp();
+    }
+
     public void OpenTreasureUI(int value, TreasureType type)
     {
         treasureUI.gameObject.SetActive(true);

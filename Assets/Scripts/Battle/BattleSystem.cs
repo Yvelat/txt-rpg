@@ -58,12 +58,15 @@ public class BattleSystem : MonoBehaviour
 
     Inventory inventory;
 
+    private int playerGainXp = 0;
+
     public void StartBattle(MonsterParty playerParty, Monster wildMonster)
     {
         this.playerParty = playerParty;
         this.wildMonster = wildMonster;
         player = playerParty.GetComponent<PlayerController>();
         isTrainerBattle = false;
+        playerGainXp = 0;
 
         StartCoroutine(SetupBattle());
     }
@@ -155,7 +158,7 @@ public class BattleSystem : MonoBehaviour
         playerParty.Monsters.ForEach(p => p.OnBattleOver());
         battleResultUi.gameObject.SetActive(true);
         DropTable dropTable = enemyUnit.Monster.Base.GetDrops(enemyUnit.Monster.Level);
-        battleResultUi.SetData(won, dropTable);
+        battleResultUi.SetData(won, dropTable, playerGainXp);
         inventory = Inventory.GetInventory();
         inventory.AddDropTable(dropTable);
         GameController.Instance.AddCoinsToPlayer(dropTable.coins);
@@ -479,6 +482,10 @@ public class BattleSystem : MonoBehaviour
 
             int XpGain = Mathf.FloorToInt((xpYield * enemyLevel * trainerBonus) / 7);
 
+            playerGainXp = GetPlayerXP(xpYield, enemyLevel, trainerBonus);
+
+            GameController.Instance.AddXpToPlayer(playerGainXp);
+
             playerUnit.Monster.XP += XpGain;
             yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} ha guadagnato {XpGain} punti esperienza");
             yield return playerUnit.Hud.SetXPSmooth();
@@ -522,7 +529,13 @@ public class BattleSystem : MonoBehaviour
         yield return CheckForBattleOver(faintedUnit);
     }
 
-    /*void*/ IEnumerator CheckForBattleOver(BattleUnit faintedUnit)
+    public int GetPlayerXP(int xpYield, int level, float trainerBonus)
+    {
+        return Mathf.FloorToInt((((xpYield / 2) * level * trainerBonus) / 10) / 2);
+    }
+
+    /*void*/
+    IEnumerator CheckForBattleOver(BattleUnit faintedUnit)
     {
         if (faintedUnit.IsPlayerUnit)
         {
