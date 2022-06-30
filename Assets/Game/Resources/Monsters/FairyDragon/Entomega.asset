@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2ddafeb9284c74eb2fab8fd579f62d, type: 3}
+  m_Name: Entomega
+  m_EditorClassIdentifier: 
+  monsterName: Entomega
+  description: bho
+  frontSprite: {fileID: 21300000, guid: 475720709cd6b2143952ac52453e81b8, type: 3}
+  battleIcon: {fileID: 0}
+  type: 4
+  rarity: 0
+  maxHp: 60
+  attack: 90
+  defense: 60
+  speed: 70
+  stamina: 100
+  xpYield: 77
+  growthRate: 4
+  catchRate: 28
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 89bee615849bc6e47b162f50e8981785, type: 2}
+    level: 1
+  lernableByItems: []
+  evolutions:
+  - evolvesInto: {fileID: 11400000, guid: 4f49605f9e9f04047a3bbad61bca2b10, type: 2}
+    requiredLevel: 63
+    requiredItem: {fileID: 0}
+  coinsRange: {x: 0, y: 0}
+  gemsRange: {x: 0, y: 0}
+  dropNumber: {x: 0, y: 0}
+  drops: []
+  totalChance: 0
