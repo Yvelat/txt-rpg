@@ -25,4 +25,9 @@ public class SkinListHandler : MonoBehaviour
         }
     }
 
+    public void SetSkin(Skin skin)
+    {
+        FindObjectOfType<FirstBootHandler>().SetSkin(skin);
+    }
+
 }

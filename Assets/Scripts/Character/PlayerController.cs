@@ -3,14 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    //TODO: make playerName private
     [SerializeField] string playerName;
     //[SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TextMeshProUGUI coinsText;
     [SerializeField] TextMeshProUGUI gemsText;
     [SerializeField] TextMeshProUGUI energyText;
+
+    [Header("PlayerUI")]
+    [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] Image playerImage;
+
+    public Skin skin { get; private set; }
 
     int coins = 0;
     int gems = 0;
@@ -36,13 +44,27 @@ public class PlayerController : MonoBehaviour
     {
         energyText.text = $"{energy}/{maxEnergy}";
 
-        coinsText.text = $"{coins}";
-        gemsText.text = $"{gems}";
-
         if (energy < maxEnergy && !recovering)
         {
             StartCoroutine(RecoverEnergy());
         }
+    }
+
+    public void Init(string name, Skin skin)
+    {
+        playerName = name;
+        this.skin = skin;
+    }
+
+    public void UpdateUIValues()
+    {
+        coinsText.text = $"{coins}";
+        gemsText.text = $"{gems}";
+    }
+
+    public void UpdateUiData()
+    {
+        levelText.text = $"Lv. {level}";
     }
 
     public void UseEnergy(int amount)
@@ -122,25 +144,24 @@ public class PlayerController : MonoBehaviour
         {
             xp -= xpToNextLevel;
             level++;
+            UpdateUiData();
+            SetEnergyBasedOnLevel();
             return true;
         }
 
         return false;
     }
 
-    void SetName(string Name)
-    {
-        playerName = Name;
-    }
-
     public void SetCoins(int coins)
     {
         this.coins = coins;
+        UpdateUIValues();
     }
 
     public void SetGems(int gems)
     {
         this.gems = gems;
+        UpdateUIValues();
     }
 
     public string Name

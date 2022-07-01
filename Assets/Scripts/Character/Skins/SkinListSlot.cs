@@ -7,16 +7,16 @@ public class SkinListSlot : MonoBehaviour
 {
     [SerializeField] Image image;
 
-    private int skinID;
+    private Skin skin;
 
     public void SetData(Skin skin)
     {
         image.sprite = skin.FrontSprite;
-        skinID = skin.ID;
+        this.skin = skin;
     }
 
     public void SkinSelect()
     {
-
+        FindObjectOfType<FirstBootHandler>().SetSkin(skin);
     }
 }

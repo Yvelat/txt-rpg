@@ -9,6 +9,6 @@ public class PlayerNameHandler : MonoBehaviour
 
     public void Confirm()
     {
-        Debug.Log(inputField.text);
+        FindObjectOfType<FirstBootHandler>().SetName(inputField.text);
     }
 }
