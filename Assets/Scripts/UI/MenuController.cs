@@ -12,6 +12,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] GameObject adventuring;
     [SerializeField] GameObject partyScreen;
     [SerializeField] GameObject inventoryScreen;
+    [SerializeField] QuestUI questsScreen;
     [SerializeField] SingleAudioManager mainMenuMusic;
 
     public event Action<int> onMenuSelected;
@@ -60,6 +61,19 @@ public class MenuController : MonoBehaviour
         mainMenu.SetActive(false);
         partyScreen.SetActive(true);
         GameController.Instance.SetStateToParty();
+    }
+
+    public void BtQuests()
+    {
+        mainMenu.SetActive(false);
+        questsScreen.gameObject.SetActive(true);
+        questsScreen.SetData();
+    }
+
+    public void BtnQuestsBack()
+    {
+        questsScreen.gameObject.SetActive(false);
+        mainMenu.SetActive(true);
     }
 
     public void HandleUpdate()

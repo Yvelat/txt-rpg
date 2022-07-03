@@ -55,6 +55,8 @@ public class BattleSystem : MonoBehaviour
     Monster wildMonster;
 
     bool isTrainerBattle = false;
+    bool isBossBattle = false;
+    DropTable bossDrops;
     PlayerController player;
     TrainerController trainer;
 
@@ -72,6 +74,7 @@ public class BattleSystem : MonoBehaviour
         player = playerParty.GetComponent<PlayerController>();
         isTrainerBattle = false;
         catched = false;
+        isBossBattle = false;
         playerGainXp = 0;
 
         StartCoroutine(SetupBattle());
@@ -84,7 +87,22 @@ public class BattleSystem : MonoBehaviour
         player = playerParty.GetComponent<PlayerController>();
         isTrainerBattle = false;
         catched = false;
+        isBossBattle = false;
         playerGainXp = 0;
+
+        yield return SetupBattle();
+    }
+
+    public IEnumerator StartBossBattleCorutine(MonsterParty playerParty, Monster wildMonster, DropTable fixedDropTable)
+    {
+        this.playerParty = playerParty;
+        this.wildMonster = wildMonster;
+        player = playerParty.GetComponent<PlayerController>();
+        isTrainerBattle = false;
+        catched = false;
+        isBossBattle = true;
+        playerGainXp = 0;
+        bossDrops = fixedDropTable;
 
         yield return SetupBattle();
     }
@@ -180,7 +198,7 @@ public class BattleSystem : MonoBehaviour
         playerParty.Monsters.ForEach(p => p.OnBattleOver());
         battleResultUi.gameObject.SetActive(true);
 
-        if (!isTrainerBattle)
+        if (!isTrainerBattle && !isBossBattle)
         {
             DropTable dropTable = enemyUnit.Monster.Base.GetDrops(enemyUnit.Monster.Level);
             battleResultUi.SetData(won, dropTable, playerGainXp);
@@ -194,7 +212,7 @@ public class BattleSystem : MonoBehaviour
             else
                 yield return questController.ProgressAllQuestOfType(QuestType.Catch, 1);
         }
-        else
+        else if (isTrainerBattle)
         {
             int coins = trainerParty.CoinsDrop();
             int gems = trainerParty.GemDrop();
@@ -203,6 +221,15 @@ public class BattleSystem : MonoBehaviour
             GameController.Instance.AddGemsToPlayer(gems);
             yield return questController.ProgressAllQuestOfType(QuestType.DefeatedTrainers, 1);
             yield return questController.ProgressAllQuestOfType(QuestType.DefeatedMonster, trainerParty.GetPartyCount());
+        }
+        else if (isBossBattle)
+        {
+            DropTable dropTable = bossDrops;
+            battleResultUi.SetData(won, dropTable, playerGainXp);
+            inventory = Inventory.GetInventory();
+            inventory.AddDropTable(dropTable);
+            GameController.Instance.AddCoinsToPlayer(dropTable.coins);
+            GameController.Instance.AddGemsToPlayer(dropTable.gems);
         }
         
         yield return new WaitUntil(() => battleResultUi.exitPressed == true);
@@ -923,6 +950,14 @@ public class BattleSystem : MonoBehaviour
         if (isTrainerBattle)
         {
             yield return dialogBox.TypeDialog($"Non puoi rubare i Monster altrui");
+            state = BattleState.RunningTurn;
+            yield break;
+        }
+
+        if (isBossBattle)
+        {
+            //TODO: scegliere un motivo
+            yield return dialogBox.TypeDialog($"Impossibile usare");
             state = BattleState.RunningTurn;
             yield break;
         }

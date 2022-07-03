@@ -6,6 +6,14 @@ using UnityEngine;
 public class Dungeon : ScriptableObject
 {
     [SerializeField] string dungeonName;
+    [SerializeField] int stepToComplete;
+    [SerializeField] int stepToUnlock;
+
+    [Header("Boss")]
+    [SerializeField] MonsterBase monsterBoss;
+    [SerializeField] int bossLevel;
+    [SerializeField] DropTable fixedDrop;
+    [SerializeField] QuestBase bossQuest;
 
     [Header("Monster Encounters")]
     [SerializeField] List<MonsterEncounterRecord> wildMonsters;
@@ -53,6 +61,21 @@ public class Dungeon : ScriptableObject
         }
     }
 
+    public MonsterBase Boss
+    {
+        get { return monsterBoss; }
+    }
+
+    public int BossLevel
+    {
+        get { return bossLevel; }
+    }
+
+    public DropTable BossDrop
+    {
+        get { return fixedDrop; }
+    }
+
     public List<MonsterEncounterRecord> WildEncounters
     {
         get { return wildMonsters; }
@@ -76,5 +99,20 @@ public class Dungeon : ScriptableObject
     public string Name
     {
         get { return dungeonName; }
+    }
+
+    public int StepToComplete
+    {
+        get { return stepToComplete; }
+    }
+
+    public int StepToUnlock
+    {
+        get { return stepToUnlock; }
+    }
+
+    public QuestBase BossQuest
+    {
+        get { return bossQuest; }
     }
 }

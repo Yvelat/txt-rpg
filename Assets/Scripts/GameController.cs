@@ -24,6 +24,9 @@ public class GameController : MonoBehaviour
     GameState prevState;
     GameState stateBeforeEvolution;
 
+    bool isBossBattle = false;
+    QuestBase bossQuest;
+
     public SceneDetails CurrentScene { get; private set; }
     public SceneDetails PrevScene { get; private set; }
 
@@ -107,11 +110,21 @@ public class GameController : MonoBehaviour
         if (playerController.HasEnergy())
         {
             dungeonArea.searching = true;
-            playerController.UseEnergy(1);
+            playerController.UseEnergy();
             ProgressAllQuestOfType(QuestType.Step, 1);
             StartCoroutine(dungeonArea.Search());
         }
         
+    }
+
+    public void AddStepToPlayer()
+    {
+        playerController.AddStep();
+    }
+
+    public int GetPlayerStepCounter()
+    {
+        return playerController.stepCounter;
     }
 
     public void OpenMenu()
@@ -125,11 +138,30 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
 
+        isBossBattle = false;
+
         var playerParty = playerController.GetComponent<MonsterParty>();
 
         var wildMonsterCopy = new Monster(wildMonster.Base, wildMonster.Level);
 
         yield return battleSystem.StartBattleCorutine(playerParty, wildMonsterCopy);
+    }
+
+    public IEnumerator StartBossBattleCorutine(Monster boss, DropTable table, QuestBase dgQuest)
+    {
+        state = GameState.Battle;
+        battleSystem.gameObject.SetActive(true);
+        worldCamera.gameObject.SetActive(false);
+
+        isBossBattle = true;
+
+        bossQuest = dgQuest;
+
+        var playerParty = playerController.GetComponent<MonsterParty>();
+
+        var wildMonsterCopy = new Monster(boss.Base, boss.Level);
+
+        yield return battleSystem.StartBossBattleCorutine(playerParty, wildMonsterCopy, table);
     }
 
     public void StartBattle()
@@ -152,6 +184,8 @@ public class GameController : MonoBehaviour
         battleSystem.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
 
+        isBossBattle = false;
+
         //this.trainer = trainer;
         var playerParty = playerController.GetComponent<MonsterParty>();
         //var trainerParty = trainer.GetComponent<MonsterParty>();
@@ -172,6 +206,24 @@ public class GameController : MonoBehaviour
         {
             trainer.BattleLost();
             trainer = null;
+        }
+
+        if (isBossBattle)
+        {
+            if (won)
+            {
+                AddStepToPlayer();
+
+                if(bossQuest != null)
+                    ProgressSpecificQuest(bossQuest);
+
+                bossQuest = null;
+                isBossBattle = false;
+            }
+            else
+            {
+                isBossBattle = false;
+            }
         }
 
         partyScreen.SetPartyData();
@@ -333,6 +385,21 @@ public class GameController : MonoBehaviour
     public void ProgressAllQuestOfType(QuestType type, int amount)
     {
         StartCoroutine(questController.ProgressAllQuestOfType(type, amount));
+    }
+
+    public void ProgressSpecificQuest(QuestBase quest)
+    {
+        questController.ProgressSpecificQuest(quest, 1);
+    }
+
+    public QuestList GetQuestListComponent()
+    {
+        return playerController.GetComponent<QuestList>();
+    }
+
+    public Skin GetPlayerSkin()
+    {
+        return playerController.skin;
     }
 
     public GameState State => state;

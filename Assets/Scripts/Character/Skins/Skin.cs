@@ -7,8 +7,9 @@ public class Skin : ScriptableObject
 {
     [SerializeField] Sprite frontSprite;
     [SerializeField] Sprite rightSprite;
-
+    [SerializeField] List<Sprite> sprites;
 
     public Sprite FrontSprite => frontSprite;
     public Sprite RightSprite => rightSprite;
+    public List<Sprite> Sprites => sprites;
 }

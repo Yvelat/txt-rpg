@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
 
     public Skin skin { get; private set; }
 
+    public int stepCounter { get; private set; }
+
     int coins = 0;
     int gems = 0;
     int energy = -1;
@@ -67,9 +69,14 @@ public class PlayerController : MonoBehaviour
         levelText.text = $"Lv. {level}";
     }
 
-    public void UseEnergy(int amount)
+    public void UseEnergy(int amount = 1)
     {
         energy -= amount;
+    }
+
+    public void AddStep(int amount = 1)
+    {
+        stepCounter += amount;
     }
 
     public bool HasEnergy()

@@ -8,6 +8,7 @@ public class DungeonArea : MonoBehaviour
     [SerializeField] MapArea area;
     [SerializeField] TextMeshProUGUI infoText;
     [SerializeField] GameObject buttons;
+    [SerializeField] GameObject bossButton;
 
     [Header("Transitions")]
     [SerializeField] GameObject transition;
@@ -19,6 +20,9 @@ public class DungeonArea : MonoBehaviour
     [SerializeField] SingleAudioManager adventureAudio;
     [SerializeField] SingleAudioManager commonEncounterAudio;
     [SerializeField] SingleAudioManager rareEncounterAudio;
+
+    [Header("PlayerSprite")]
+    [SerializeField] SpriteAnimator animator;
 
     Dungeon dungeon;
     Animator transitionAnim;
@@ -57,16 +61,18 @@ public class DungeonArea : MonoBehaviour
         searching = false;
         eventOccur = false;
         infoText.text = "";
+        animator.SetData(GameController.Instance.GetPlayerSkin().Sprites);
         buttons.SetActive(true);
+        bossButton.SetActive(false);
     }
 
     public void SetDungeon(Dungeon dg)
     {
         dungeon = dg;
-        InitializeAreaWildEncounters();
+        InitializeMapArea();
     }
 
-    public void InitializeAreaWildEncounters()
+    public void InitializeMapArea()
     {
         area.SetData(dungeon);
     }
@@ -90,6 +96,10 @@ public class DungeonArea : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             yield return new WaitUntil(() => eventOccur == false);
             buttons.SetActive(true);
+            if(CheckIfCanBossBattle())
+                bossButton.SetActive(true);
+            else
+                bossButton.SetActive(false);
             searching = false;
                 
         }
@@ -111,9 +121,59 @@ public class DungeonArea : MonoBehaviour
         }
     }
 
+    public void StartBossBattle()
+    {
+        buttons.SetActive(false);
+        infoText.text = "";
+        StartCoroutine(BossBattle());
+    }
+
+    public bool CheckIfCanBossBattle()
+    {
+        if(GameController.Instance.GetPlayerStepCounter() == dungeon.StepToComplete)
+            return true;
+        else
+            return false;
+    }
+
+    public bool CheckIfIsComplete()
+    {
+        if (GameController.Instance.GetPlayerStepCounter() > dungeon.StepToComplete)
+            return true;
+        else
+            return false;
+    }
+
+    IEnumerator BossBattle()
+    {
+        transitioning = true;
+        Debug.Log("Boss encounter");
+        var monster = new Monster(dungeon.Boss, dungeon.BossLevel);
+        preTransitionRare.SetActive(true);
+        adventureAudio.Pause();
+        //adventureAudio.gameObject.SetActive(false);
+        rareEncounterAudio.gameObject.SetActive(true);
+        rareEncounterAudio.ResetAndPlay();
+        yield return new WaitForSeconds(6f);
+        yield return TransitionIN();
+        yield return new WaitUntil(() => transitioning == false);
+        preTransitionRare.SetActive(false);
+        yield return GameController.Instance.StartBossBattleCorutine(monster, dungeon.BossDrop, dungeon.BossQuest);
+        transitionAnim.Play("idle");
+        yield return new WaitForSeconds(1f);
+        yield return new WaitUntil(() => GameController.Instance.State != GameState.Battle && GameController.Instance.State != GameState.Evolution);
+        eventOccur = false;
+        buttons.SetActive(true);
+        bossButton.SetActive(false);
+    }
+
     IEnumerator CheckEvent()
     {
         eventOccur = true;
+
+        if(!CheckIfCanBossBattle() && !CheckIfIsComplete())
+            GameController.Instance.AddStepToPlayer();
+
         int random = Random.Range(1, 101);
 
         /* Solo per scopo di Test */

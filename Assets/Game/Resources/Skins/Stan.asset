@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frontSprite: {fileID: 2093407047, guid: 78e60ebc509f4e845a471ce55a9a2b72, type: 3}
   rightSprite: {fileID: 260491605, guid: 78e60ebc509f4e845a471ce55a9a2b72, type: 3}
+  sprites:
+  - {fileID: -1213311702, guid: 78e60ebc509f4e845a471ce55a9a2b72, type: 3}
+  - {fileID: 260491605, guid: 78e60ebc509f4e845a471ce55a9a2b72, type: 3}
+  - {fileID: 1320563957, guid: 78e60ebc509f4e845a471ce55a9a2b72, type: 3}

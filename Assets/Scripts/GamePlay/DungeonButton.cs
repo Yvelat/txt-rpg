@@ -1,3 +1,4 @@
+using Lean.Gui;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,6 +19,17 @@ public class DungeonButton : MonoBehaviour
         dungeonSelector = selector;
         adventuring = newMenu;
         text.text = dungeon.Name;
+
+        if(GameController.Instance.GetPlayerStepCounter() < dungeon.StepToUnlock)
+        {
+            GetComponent<LeanButton>().interactable = false;
+            text.text = "Bloccato";
+        }
+        else
+        {
+            GetComponent<LeanButton>().interactable = true;
+        }
+
     }
 
     public void EnterDungeon()
