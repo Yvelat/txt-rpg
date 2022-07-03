@@ -144,17 +144,18 @@ public class GameController : MonoBehaviour
         battleSystem.StartBattle(playerParty, wildMonsterCopy);
     }
 
-    public void StartTrainerBattle(TrainerController trainer)
+    public IEnumerator StartTrainerBattle(Trainer trainer)
     {
         state = GameState.Battle;
         battleSystem.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
 
-        this.trainer = trainer;
+        //this.trainer = trainer;
         var playerParty = playerController.GetComponent<MonsterParty>();
-        var trainerParty = trainer.GetComponent<MonsterParty>();
+        //var trainerParty = trainer.GetComponent<MonsterParty>();
 
-        battleSystem.StartTrainerBattle(playerParty, trainerParty);
+        battleSystem.StartTrainerBattle(playerParty, trainer);
+        yield return null;
     }
 
     public void OnEnterTrainerView(TrainerController trainer)

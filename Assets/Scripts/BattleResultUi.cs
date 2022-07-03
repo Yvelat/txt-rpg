@@ -26,12 +26,24 @@ public class BattleResultUi : MonoBehaviour
         SetDropList(table.dropList);
     }
 
+    public void SetData(bool win, int coins, int gems, int playerXp)
+    {
+        exitPressed = false;
+        winText.text = (win) ? "Hai Vinto!" : "Hai Perso";
+        playerXpText.text = $"Hai guadagnato {playerXp} XP";
+        coinText.text = coins.ToString();
+        gemText.text = gems.ToString();
+        SetDropList(null);
+    }
+
     public void SetDropList(List<DropTableElement> drops)
     {
         foreach (Transform child in DropList.transform)
         {
             Destroy(child.gameObject);
         }
+
+        if (drops == null) return;
 
         foreach (DropTableElement drop in drops)
         {

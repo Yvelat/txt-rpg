@@ -7,6 +7,7 @@ public class MapArea : MonoBehaviour
 {
     List<MonsterEncounterRecord> wildMonsters;
     List<MonsterEncounterRecord> rareWildMonsters;
+    List<Trainer> trainers;
     List<Drop> drops;
 
     public void SetData(Dungeon dungeon)
@@ -14,6 +15,14 @@ public class MapArea : MonoBehaviour
         wildMonsters = dungeon.WildEncounters;
         rareWildMonsters = dungeon.RareWildMonsters;
         drops = dungeon.Drops;
+        trainers = dungeon.Trainers;
+    }
+
+    public Trainer GetRandomTrainer()
+    {
+        int rand = Random.Range(0, trainers.Count);
+
+        return trainers[rand];
     }
 
     public Monster GetRandomWildMonster()

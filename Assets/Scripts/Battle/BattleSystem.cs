@@ -46,7 +46,8 @@ public class BattleSystem : MonoBehaviour
     bool aboutToUseChoice = true;
 
     MonsterParty playerParty;
-    MonsterParty trainerParty;
+    //MonsterParty trainerParty;
+    Trainer trainerParty;
     Monster wildMonster;
 
     bool isTrainerBattle = false;
@@ -81,7 +82,7 @@ public class BattleSystem : MonoBehaviour
         yield return SetupBattle();
     }
 
-    public void StartTrainerBattle(MonsterParty playerParty, MonsterParty trainerParty)
+    /*public void StartTrainerBattle(MonsterParty playerParty, MonsterParty trainerParty)
     {
         this.playerParty = playerParty;
         this.trainerParty = trainerParty;
@@ -89,6 +90,20 @@ public class BattleSystem : MonoBehaviour
         isTrainerBattle = true;
         player = playerParty.GetComponent<PlayerController>();
         trainer = trainerParty.GetComponent<TrainerController>();
+
+        StartCoroutine(SetupBattle());
+    }*/
+
+    public void StartTrainerBattle(MonsterParty playerParty, Trainer trainerParty)
+    {
+        this.playerParty = playerParty;
+        this.trainerParty = trainerParty;
+
+        this.trainerParty.Init();
+
+        isTrainerBattle = true;
+        player = playerParty.GetComponent<PlayerController>();
+        //trainer = trainerParty.GetComponent<TrainerController>();
 
         StartCoroutine(SetupBattle());
     }
@@ -123,22 +138,22 @@ public class BattleSystem : MonoBehaviour
             playerUnit.gameObject.SetActive(false);
             enemyUnit.gameObject.SetActive(false);
 
-            playerImage.gameObject.SetActive(true);
-            trainerImage.gameObject.SetActive(true);
+            //playerImage.gameObject.SetActive(true);
+            //trainerImage.gameObject.SetActive(true);
             //playerImage.sprite = player.Sprite;
-            trainerImage.sprite = trainer.Sprite;
+            //trainerImage.sprite = trainer.Sprite;
 
-            yield return dialogBox.TypeDialog($"{trainer.Name} vuole combattere!");
+            yield return dialogBox.TypeDialog($"{trainerParty.Name} vuole combattere!");
 
             //Invia il primo Monster dell'allenatore
-            trainerImage.gameObject.SetActive(false);
+            //trainerImage.gameObject.SetActive(false);
             enemyUnit.gameObject.SetActive(true);
             var enemyMonster = trainerParty.GetHealthyMonster();
             enemyUnit.Setup(enemyMonster);
-            yield return dialogBox.TypeDialog($"{trainer.Name} manda in campo {enemyMonster.Base.Name}!");
+            yield return dialogBox.TypeDialog($"{trainerParty.Name} manda in campo {enemyMonster.Base.Name}!");
 
             //Invia il primo Monster del giocatore
-            playerImage.gameObject.SetActive(false);
+            //playerImage.gameObject.SetActive(false);
             playerUnit.gameObject.SetActive(true);
             var playerMonster = playerParty.GetHealthyMonster();
             playerUnit.Setup(playerMonster);
@@ -157,12 +172,25 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.BattleOver;
         playerParty.Monsters.ForEach(p => p.OnBattleOver());
         battleResultUi.gameObject.SetActive(true);
-        DropTable dropTable = enemyUnit.Monster.Base.GetDrops(enemyUnit.Monster.Level);
-        battleResultUi.SetData(won, dropTable, playerGainXp);
-        inventory = Inventory.GetInventory();
-        inventory.AddDropTable(dropTable);
-        GameController.Instance.AddCoinsToPlayer(dropTable.coins);
-        GameController.Instance.AddGemsToPlayer(dropTable.gems);
+
+        if (!isTrainerBattle)
+        {
+            DropTable dropTable = enemyUnit.Monster.Base.GetDrops(enemyUnit.Monster.Level);
+            battleResultUi.SetData(won, dropTable, playerGainXp);
+            inventory = Inventory.GetInventory();
+            inventory.AddDropTable(dropTable);
+            GameController.Instance.AddCoinsToPlayer(dropTable.coins);
+            GameController.Instance.AddGemsToPlayer(dropTable.gems);
+        }
+        else
+        {
+            int coins = trainerParty.CoinsDrop();
+            int gems = trainerParty.GemDrop();
+            battleResultUi.SetData(won, coins, gems, playerGainXp);
+            GameController.Instance.AddCoinsToPlayer(coins);
+            GameController.Instance.AddGemsToPlayer(gems);
+        }
+        
         yield return new WaitUntil(() => battleResultUi.exitPressed == true);
         battleResultUi.gameObject.SetActive(false);
         playerUnit.Hud.ClearData();
@@ -207,7 +235,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator AboutToUse(Monster newMonster)
     {
         state = BattleState.Busy;
-        yield return dialogBox.TypeDialog($"{trainer.Name} manderà in campo un {newMonster.Base.Name}. Vuoi cambiare Monster?");
+        yield return dialogBox.TypeDialog($"{trainerParty.Name} manderà in campo un {newMonster.Base.Name}. Vuoi cambiare Monster?");
 
         state = BattleState.AboutToUse;
         dialogBox.EnableChoiceBox(true);
@@ -856,7 +884,7 @@ public class BattleSystem : MonoBehaviour
 
         var nextMonster = trainerParty.GetHealthyMonster();
         enemyUnit.Setup(nextMonster);
-        yield return dialogBox.TypeDialog($"{trainer.Name} manda in campo {nextMonster.Base.Name}!");
+        yield return dialogBox.TypeDialog($"{trainerParty.Name} manda in campo {nextMonster.Base.Name}!");
 
         state = BattleState.RunningTurn;
     }

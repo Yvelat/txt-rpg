@@ -2612,7 +2612,7 @@ Material:
     - _FaceTex:
         m_Texture: {fileID: 2800000, guid: 59a10af9c9defb548a89063b68d77792, type: 3}
         m_Scale: {x: 0.15, y: 0.38}
-        m_Offset: {x: 0.350398, y: 0}
+        m_Offset: {x: 0.20006995, y: 0}
     - _MainTex:
         m_Texture: {fileID: -112434607489197824}
         m_Scale: {x: 1, y: 1}

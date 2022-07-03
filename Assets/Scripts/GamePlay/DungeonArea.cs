@@ -142,8 +142,7 @@ public class DungeonArea : MonoBehaviour
         {
             //trainer
             // TODO: Add Trainer Encounter
-            Debug.Log("Trainer Encounter");
-            eventOccur = false;
+            yield return TrainerBattle();
         }
         else if (random > 60 && random <= 100)
         {
@@ -175,6 +174,26 @@ public class DungeonArea : MonoBehaviour
         }
     }
 
+    IEnumerator TrainerBattle()
+    {
+        transitioning = true;
+        Debug.Log("Trainer encounter");
+        var trainer = area.GetRandomTrainer();
+        preTransitionCommon.SetActive(true);
+        adventureAudio.Pause();
+        commonEncounterAudio.gameObject.SetActive(true);
+        commonEncounterAudio.ResetAndPlay();
+        yield return new WaitForSeconds(3f);
+        yield return TransitionIN();
+        yield return new WaitUntil(() => transitioning == false);
+        preTransitionCommon.SetActive(false);
+        yield return GameController.Instance.StartTrainerBattle(trainer);
+        transitionAnim.Play("idle");
+        yield return new WaitForSeconds(1f);
+        yield return new WaitUntil(() => GameController.Instance.State != GameState.Battle && GameController.Instance.State != GameState.Evolution);
+        eventOccur = false;
+    }
+
     IEnumerator CheckRareMonsterEncounter()
     {
         int random = Random.Range(1, 101);
@@ -191,7 +210,6 @@ public class DungeonArea : MonoBehaviour
             transitioning = true;
             Debug.Log("Monster encounter");
             var monster = area.GetRandomWildMonster();
-            Debug.Log(monster.ToString());
             preTransitionCommon.SetActive(true);
             adventureAudio.Pause();
             //adventureAudio.gameObject.SetActive(false);
@@ -213,7 +231,6 @@ public class DungeonArea : MonoBehaviour
             transitioning = true;
             Debug.Log("Rare Monster encounter");
             var monster = area.GetRandomRareWildMonster();
-            Debug.Log(monster.ToString());
             preTransitionRare.SetActive(true);
             adventureAudio.Pause();
             //adventureAudio.gameObject.SetActive(false);

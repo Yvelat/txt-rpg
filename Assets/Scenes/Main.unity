@@ -20500,6 +20500,7 @@ GameObject:
   - component: {fileID: 1971471943}
   - component: {fileID: 1971471946}
   - component: {fileID: 1971471947}
+  - component: {fileID: 1971471948}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -20520,6 +20521,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsters:
+  - _base: {fileID: 11400000, guid: 4f49605f9e9f04047a3bbad61bca2b10, type: 2}
+    level: 15
   - _base: {fileID: 11400000, guid: b9167b8db13ece34abf21daeba9ad6bb, type: 2}
     level: 10
 --- !u!114 &1971471944
@@ -20588,6 +20591,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd91e5c50d28d5d40a103afb4013f2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1971471948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971471942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 526ea56af2db34446b9b9d40f27ee96b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quests: []
 --- !u!1 &1972858518
 GameObject:
   m_ObjectHideFlags: 0

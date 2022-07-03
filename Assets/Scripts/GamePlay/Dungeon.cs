@@ -11,6 +11,8 @@ public class Dungeon : ScriptableObject
     [SerializeField] List<MonsterEncounterRecord> wildMonsters;
     [Header("Rare Monster Encounters")]
     [SerializeField] List<MonsterEncounterRecord> rareWildMonsters;
+    [Header("Trainers")]
+    [SerializeField] List<Trainer> trainers;
     [Header("DropsWalking")]
     [SerializeField] List<Drop> drops;
 
@@ -59,6 +61,11 @@ public class Dungeon : ScriptableObject
     public List<MonsterEncounterRecord> RareWildMonsters
     {
         get { return rareWildMonsters; }
+    }
+
+    public List<Trainer> Trainers
+    {
+        get { return trainers; }
     }
 
     public List<Drop> Drops

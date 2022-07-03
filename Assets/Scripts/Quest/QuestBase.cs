@@ -2,24 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Quests/Crea nuova quest")]
+[CreateAssetMenu(menuName = "Quests/Crea nuova Quest")]
 public class QuestBase : ScriptableObject
 {
     [SerializeField] string questName;
     [SerializeField] string description;
+    [SerializeField] string bigDescription; //Opzionale
 
-    [SerializeField] Dialog startDialogue;
-    [SerializeField] Dialog inProgressDialogue; //OPZIONALE
-    [SerializeField] Dialog completedDialogue;
+    [SerializeField] QuestType type;
+    [SerializeField] int maxProgress;
 
-    [SerializeField] ItemBase requireItem;
-    [SerializeField] ItemBase rewardItem;
+    [Header("FixedDrop")]
+    [SerializeField] DropTable dropTable;
 
     public string Name => questName;
     public string Description => description;
-    public Dialog StartDialogue => startDialogue;
-    public Dialog InProgressDialogue => inProgressDialogue?.Lines?.Count > 0 ? inProgressDialogue : startDialogue;
-    public Dialog CompletedDialogue => completedDialogue;
-    public ItemBase RequireItem => requireItem;
-    public ItemBase RewardItem => rewardItem;
+    public string BigDescription => bigDescription;
+    public int MaxProgress => maxProgress;
+    public DropTable DropTable => dropTable;
+    public QuestType Type => type;
+
+}
+
+public enum QuestType
+{
+    Dungeon,
+    DefeatedMonster,
+    Catch,
+    Step,
+    DefeatedTrainers
 }

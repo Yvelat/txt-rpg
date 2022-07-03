@@ -20,7 +20,7 @@ public class TrainerController : MonoBehaviour
         if (!battleLost)
         {
             yield return DialogManager.Instance.ShowDialog(dialog);
-            GameController.Instance.StartTrainerBattle(this);
+            //GameController.Instance.StartTrainerBattle(this);
         }
         else
         {
@@ -42,7 +42,7 @@ public class TrainerController : MonoBehaviour
         
 
         yield return DialogManager.Instance.ShowDialog(dialog);
-        GameController.Instance.StartTrainerBattle(this);
+        //GameController.Instance.StartTrainerBattle(this);
     }
 
     public void BattleLost()

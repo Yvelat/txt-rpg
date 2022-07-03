@@ -345,6 +345,7 @@ public class Drop
     public ItemBase Item => item;
 }
 
+[System.Serializable]
 public class DropTable
 {
     public int coins;

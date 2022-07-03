@@ -5,87 +5,47 @@ using UnityEngine;
 [System.Serializable]
 public class Quest
 {
-    public QuestBase Base { get; private set; }
+    [SerializeField] QuestBase baseQuest;
     public QuestStatus Status { get; private set; }
 
-    public Quest(QuestBase _base)
-    {
-        Base = _base;
-    }
+    public int Progress { get; private set; }
 
-    public Quest(QuestSaveData saveData)
-    {
-        Base = QuestDB.GetObjectByName(saveData.name);
-        Status = saveData.status;
-    }
+    private bool redeemed = false;
 
-    public QuestSaveData GetSaveData()
+    public void Init()
     {
-        var saveData = new QuestSaveData()
+        if (!redeemed)
         {
-            name = Base.name,
-            status = Status
-        };
-
-        return saveData;
+            if (Progress < baseQuest.MaxProgress)
+            {
+                Status = QuestStatus.Uncomplete;
+            }
+            else if (Progress >= baseQuest.MaxProgress)
+            {
+                Status = QuestStatus.Completed;
+            }
+        }
+        else
+        {
+            Status = QuestStatus.Completed;
+        }
     }
 
-    public IEnumerator StartQuest()
-    {
-        Status = QuestStatus.Started;
-
-        yield return DialogManager.Instance.ShowDialog(Base.StartDialogue);
-
-        var questList = QuestList.GetQuestList();
-        questList.AddQuest(this);
-    }
-
-    public IEnumerator CompleteQuest(Transform player)
+    public IEnumerator CompleteQuest()
     {
         Status = QuestStatus.Completed;
 
-        yield return DialogManager.Instance.ShowDialog(Base.CompletedDialogue);
-
-        var inventory = Inventory.GetInventory();
-
-        if(Base.RequireItem != null)
-        {
-            inventory.RemoveItem(Base.RequireItem);
-        }
-
-        if (Base.RewardItem != null)
-        {
-            inventory.AddItem(Base.RewardItem);
-
-            string playerName = player.GetComponent<PlayerController>().Name;
-
-            yield return DialogManager.Instance.ShowDialodText($"{playerName} ha ricevuto un {Base.RewardItem.Name}");
-        }
-
-        var questList = QuestList.GetQuestList();
-        questList.AddQuest(this);
+        yield return null;
     }
 
-    public bool CanBeCompleted()
+    public void AddProgressQuest(int amount)
     {
-        var inventory = Inventory.GetInventory();
-
-        if (Base.RequireItem != null)
-        {
-            if(!inventory.HasItem(Base.RequireItem))
-                return false;
-        }
-
-        return true;
+        Progress += amount;
     }
 
+    public QuestBase Base => baseQuest;
+
+    public bool Redeemed => redeemed;
 }
 
-[System.Serializable]
-public class QuestSaveData
-{
-    public string name;
-    public QuestStatus status;
-}
-
-public enum QuestStatus { None, Started, Completed }
+public enum QuestStatus { None, Uncomplete, Completed }
