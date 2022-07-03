@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     [SerializeField] DungeonArea dungeonArea;
     [SerializeField] GameObject menuChoices;
     [SerializeField] TreasureUi treasureUI;
+    [SerializeField] QuestController questController;
 
     TrainerController trainer;
 
@@ -107,6 +108,7 @@ public class GameController : MonoBehaviour
         {
             dungeonArea.searching = true;
             playerController.UseEnergy(1);
+            ProgressAllQuestOfType(QuestType.Step, 1);
             StartCoroutine(dungeonArea.Search());
         }
         
@@ -326,6 +328,11 @@ public class GameController : MonoBehaviour
     {
         treasureUI.gameObject.SetActive(true);
         treasureUI.SetData(drop);
+    }
+
+    public void ProgressAllQuestOfType(QuestType type, int amount)
+    {
+        StartCoroutine(questController.ProgressAllQuestOfType(type, amount));
     }
 
     public GameState State => state;

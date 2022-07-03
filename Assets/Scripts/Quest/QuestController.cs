@@ -6,7 +6,7 @@ public class QuestController : MonoBehaviour
 {
     [SerializeField] QuestList questList;
 
-    public void ProgressAllQuestOfType(QuestType type, int amount)
+    public IEnumerator ProgressAllQuestOfType(QuestType type, int amount)
     {
         foreach (var quest in questList.Quests)
         {
@@ -15,6 +15,8 @@ public class QuestController : MonoBehaviour
                 quest.AddProgressQuest(amount);
             }
         }
+
+        yield return null;
     }
 
     public void ProgressSpecificQuest(string name, int amount)

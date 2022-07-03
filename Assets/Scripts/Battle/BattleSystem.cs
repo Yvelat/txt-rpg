@@ -35,8 +35,12 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] GameObject transition;
     [SerializeField] Animator transitionAnim;
 
+    [Header("Quest")]
+    [SerializeField] QuestController questController;
+
 
     bool transitioning = false;
+    bool catched = false;
 
     public event Action<bool> OnBattleOver;
 
@@ -67,6 +71,7 @@ public class BattleSystem : MonoBehaviour
         this.wildMonster = wildMonster;
         player = playerParty.GetComponent<PlayerController>();
         isTrainerBattle = false;
+        catched = false;
         playerGainXp = 0;
 
         StartCoroutine(SetupBattle());
@@ -78,6 +83,8 @@ public class BattleSystem : MonoBehaviour
         this.wildMonster = wildMonster;
         player = playerParty.GetComponent<PlayerController>();
         isTrainerBattle = false;
+        catched = false;
+        playerGainXp = 0;
 
         yield return SetupBattle();
     }
@@ -181,6 +188,11 @@ public class BattleSystem : MonoBehaviour
             inventory.AddDropTable(dropTable);
             GameController.Instance.AddCoinsToPlayer(dropTable.coins);
             GameController.Instance.AddGemsToPlayer(dropTable.gems);
+
+            if (!catched)
+                yield return questController.ProgressAllQuestOfType(QuestType.DefeatedMonster, 1);
+            else
+                yield return questController.ProgressAllQuestOfType(QuestType.Catch, 1);
         }
         else
         {
@@ -189,6 +201,8 @@ public class BattleSystem : MonoBehaviour
             battleResultUi.SetData(won, coins, gems, playerGainXp);
             GameController.Instance.AddCoinsToPlayer(coins);
             GameController.Instance.AddGemsToPlayer(gems);
+            yield return questController.ProgressAllQuestOfType(QuestType.DefeatedTrainers, 1);
+            yield return questController.ProgressAllQuestOfType(QuestType.DefeatedMonster, trainerParty.GetPartyCount());
         }
         
         yield return new WaitUntil(() => battleResultUi.exitPressed == true);
@@ -959,6 +973,7 @@ public class BattleSystem : MonoBehaviour
 
             //Destroy(captureDev);
             Destroy(cdObj);
+            catched = true;
             yield return BattleOver(true);
         }
         else

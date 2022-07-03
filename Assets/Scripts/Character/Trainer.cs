@@ -41,6 +41,11 @@ public class Trainer : ScriptableObject
         return gemsRange.y == 0 ? gemsRange.x : Random.Range(gemsRange.x, gemsRange.y + 1);
     }
 
+    public int GetPartyCount()
+    {
+        return party.Count;
+    }
+
     public string Name => trainerName;
 
 }
