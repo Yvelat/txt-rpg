@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject menuChoices;
     [SerializeField] TreasureUi treasureUI;
     [SerializeField] QuestController questController;
+    [SerializeField] PlayerLevelUpUI playerLevelUpUI;
 
     TrainerController trainer;
 
@@ -367,7 +368,13 @@ public class GameController : MonoBehaviour
 
     public bool CheckIfPlayerCanLevelUp()
     {
-        return playerController.CheckLevelUp();
+        return playerController.CanLevelUp();
+    }
+
+    public void ExecuteLevelUp()
+    {
+        playerLevelUpUI.gameObject.SetActive(true);
+        playerController.LevelUp();
     }
 
     public void OpenTreasureUI(int value, TreasureType type)
@@ -400,6 +407,11 @@ public class GameController : MonoBehaviour
     public Skin GetPlayerSkin()
     {
         return playerController.skin;
+    }
+
+    public void ShowLevelUpUI(float prevXp, float xp, int prevLvl, int lvl, int prevEnergy, int energy)
+    {
+        playerLevelUpUI.SetData(prevXp, xp, prevLvl, lvl, prevEnergy, energy);
     }
 
     public GameState State => state;

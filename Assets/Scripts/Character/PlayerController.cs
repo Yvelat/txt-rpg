@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("PlayerUI")]
     [SerializeField] TextMeshProUGUI levelText;
     [SerializeField] Image playerImage;
+    [SerializeField] Image xpBar;
 
     public Skin skin { get; private set; }
 
@@ -31,6 +32,8 @@ public class PlayerController : MonoBehaviour
     int maxEnergy = 25;
 
     int actualTime;
+
+    int prevXP;
 
     bool recovering = false;
 
@@ -67,6 +70,7 @@ public class PlayerController : MonoBehaviour
     public void UpdateUiData()
     {
         levelText.text = $"Lv. {level}";
+        SetUIXP();
     }
 
     public void UseEnergy(int amount = 1)
@@ -138,25 +142,65 @@ public class PlayerController : MonoBehaviour
         return level * level * level;
     }
 
-    public void AddXp(int amount)
+    int GetLevelXp(int lvl)
     {
-        xp += amount;
+        return lvl * lvl * lvl;
     }
 
-    public bool CheckLevelUp()
+    public void AddXp(int amount)
     {
+        prevXP = xp;
+        xp += amount;
+        SetUIXP();
+    }
+
+    public void SetUIXP()
+    {
+        float normalizedXP = GetNormalizedXP();
+        xpBar.fillAmount = normalizedXP;
+    }
+
+    float GetNormalizedXP()
+    {
+        int currLevelXP = level * level * level;
+        int nextLevelXP = GetNextLevelXp();
+
+        float normalizedXP = (float)(xp - currLevelXP) / (nextLevelXP - currLevelXP);
+        return Mathf.Clamp01(normalizedXP);
+    }
+
+    float GetPreviousNormalizedXP(int lvl)
+    {
+        int currLevelXP = lvl * lvl * lvl;
+        int nextLevelXP = GetLevelXp(lvl + 1);
+
+        float normalizedXP = (float)(prevXP - currLevelXP) / (nextLevelXP - currLevelXP);
+        return Mathf.Clamp01(normalizedXP);
+    }
+
+    public bool CanLevelUp()
+    {
+        if (xp >= GetNextLevelXp()) return true;
+
+        return false;
+    }
+
+    public void LevelUp()
+    {
+        int prevEnergy = maxEnergy;
+        int prevLevel = level;
         int xpToNextLevel = GetNextLevelXp();
 
-        if( xp >= xpToNextLevel)
+        while(xp >= xpToNextLevel)
         {
             xp -= xpToNextLevel;
             level++;
             UpdateUiData();
             SetEnergyBasedOnLevel();
-            return true;
+            xpToNextLevel = GetNextLevelXp();
         }
 
-        return false;
+        GameController.Instance.ShowLevelUpUI(GetPreviousNormalizedXP(prevLevel), GetNormalizedXP(), prevLevel, level, prevEnergy, maxEnergy);
     }
 
     public void SetCoins(int coins)

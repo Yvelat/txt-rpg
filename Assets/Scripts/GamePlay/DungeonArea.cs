@@ -9,6 +9,7 @@ public class DungeonArea : MonoBehaviour
     [SerializeField] TextMeshProUGUI infoText;
     [SerializeField] GameObject buttons;
     [SerializeField] GameObject bossButton;
+    [SerializeField] PlayerLevelUpUI playerLevelUpUI;
 
     [Header("Transitions")]
     [SerializeField] GameObject transition;
@@ -222,7 +223,6 @@ public class DungeonArea : MonoBehaviour
 
     public void BattleOver()
     {
-        //TODO: Show Player Lvl up screen if is the case
         commonEncounterAudio.gameObject.SetActive(false);
         rareEncounterAudio.gameObject.SetActive(false);
         adventureAudio.gameObject.SetActive(true);
@@ -230,8 +230,17 @@ public class DungeonArea : MonoBehaviour
 
         if (GameController.Instance.CheckIfPlayerCanLevelUp())
         {
-            //show UI
+            //execute and show UI
+            StartCoroutine(WaitForLevelUp());
         }
+    }
+
+    IEnumerator WaitForLevelUp()
+    {
+        buttons.gameObject.SetActive(false);
+        GameController.Instance.ExecuteLevelUp();
+        yield return new WaitUntil(() => playerLevelUpUI.IsClosed == true);
+        buttons.gameObject.SetActive(true);
     }
 
     IEnumerator TrainerBattle()
