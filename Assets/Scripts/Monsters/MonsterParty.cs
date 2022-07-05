@@ -50,7 +50,8 @@ public class MonsterParty : MonoBehaviour
         }
         else
         {
-            //Manda il Monster al PC
+            //TODO: Manda il Monster al PC
+            gameObject.GetComponent<MonsterBox>().AddMonsterToBox(newMonster);
         }
     }
 
