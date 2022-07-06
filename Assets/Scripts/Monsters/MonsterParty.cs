@@ -55,6 +55,49 @@ public class MonsterParty : MonoBehaviour
         }
     }
 
+    public bool SetMonster(Monster newMonster, int index)
+    {
+
+        if(monsters.Count < 6)
+        {
+            monsters.Add(newMonster);
+            OnUpdated?.Invoke();
+            return false;
+        }
+        else
+        {
+            monsters[index] = newMonster;
+            OnUpdated?.Invoke();
+            return true;
+        }
+        
+    }
+
+    public bool RemoveMonster(int index)
+    {
+        if (monsters.Count == 1)
+        {
+            return false;
+        }
+        else
+        {
+            monsters.RemoveAt(index);
+            PartyUpdated();
+            return true;
+        }
+    }
+
+    public bool HasEmptySpace()
+    {
+        if(monsters.Count < 6) return true;
+        else return false;
+    }
+
+    public Monster GetMonsterByIndex(int index)
+    {
+        return monsters[index];
+    }
+
     public IEnumerator CheckForEvolutions()
     {
         foreach (var monster in monsters)

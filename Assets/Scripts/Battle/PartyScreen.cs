@@ -137,4 +137,6 @@ public class PartyScreen : MonoBehaviour
     {
         messageText.text = message;
     }
+
+    public int Selection => selection;
 }

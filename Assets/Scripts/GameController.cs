@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState { FreeRoam, Battle, Dialog, Menu, PartyScreen, Bag, Cutscene, Paused, Evolution }
+public enum GameState { FreeRoam, Battle, Dialog, Menu, PartyScreen, Bag, MonsterBoxUI, Cutscene, Paused, Evolution }
 
 public class GameController : MonoBehaviour
 {
@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     [SerializeField] TreasureUi treasureUI;
     [SerializeField] QuestController questController;
     [SerializeField] PlayerLevelUpUI playerLevelUpUI;
+    [SerializeField] MonsterBoxUI monsterBoxUI;
 
     TrainerController trainer;
 
@@ -295,6 +296,16 @@ public class GameController : MonoBehaviour
             };
 
             inventoryUI.HandleUpdate(onBack);
+        }
+        else if (state == GameState.MonsterBoxUI)
+        {
+            Action onBack = () =>
+            {
+                monsterBoxUI.gameObject.SetActive(false);
+                menuChoices.gameObject.SetActive(true);
+                state = GameState.FreeRoam;
+            };
+            monsterBoxUI.HandleUpdate(onBack);
         }
         
     }

@@ -20,4 +20,10 @@ public class MonsterBoxUiSlot : MonoBehaviour
         level.text = $"{monsterBoxItem.level}";
         icon.sprite = monsterBoxItem.monster.FrontSprite;
     }
+
+    public void SetDetails()
+    {
+        GetComponentInParent<MonsterBoxUI>().UpdateDetails(monsterBoxItem, index);
+    }
+
 }

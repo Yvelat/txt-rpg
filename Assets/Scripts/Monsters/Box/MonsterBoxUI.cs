@@ -1,13 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
+public enum MonsterBoxUIState { ItemSelection, PartySelection, Busy }
+public enum SwitchMode { Switch, Remove }
 
 public class MonsterBoxUI : MonoBehaviour
 {
     [SerializeField] MonsterBox monsterBox;
+    [SerializeField] PartyScreen partyScreen;
+    [SerializeField] MonsterParty monsterParty;
+    [SerializeField] GameObject confirmBox;
 
-    [Header("UI")]
+    [Header("UpPageUI")]
+    [SerializeField] Image itemIcon;
+
+    [Header("DownPageUI")]
     [SerializeField] GameObject monsterBoxList;
     [SerializeField] GameObject monsterBoxUiSlotPrefab;
 
@@ -19,8 +30,21 @@ public class MonsterBoxUI : MonoBehaviour
     int selectedItem = 0;
     int selectedPage = 0;
 
+    bool messageBoxConfirmed;
+
+    Action onBack;
+
+    MonsterBoxUIState state;
+
+    SwitchMode mode;
+
+    Vector2Int selectedSlot;
+
     private void Start()
     {
+        confirmBox.SetActive(false);
+        messageBoxConfirmed = false;
+        state = MonsterBoxUIState.ItemSelection;
         InitializePage(0);
     }
 
@@ -54,6 +78,122 @@ public class MonsterBoxUI : MonoBehaviour
     void ResetSelection()
     {
         selectedItem = 0;
+    }
+
+    public void HandleUpdate(Action onBack)
+    {
+        this.onBack = onBack;
+
+        if (state == MonsterBoxUIState.PartySelection)
+        {
+
+            Action onSelected = () => {
+
+                StartCoroutine(EditParty());
+
+            };
+
+            Action onBackPartyScreen = () =>
+            {
+                ClosePartyScreen();
+            };
+
+            partyScreen.HandleUpdate(onSelected, onBackPartyScreen);
+        }
+    }
+
+    public IEnumerator EditParty()
+    {
+        state = MonsterBoxUIState.Busy;
+
+        messageBoxConfirmed = false;
+
+        if (selectedSlot == null) yield break;
+
+        if (mode == SwitchMode.Switch)
+        {
+
+            Monster monster = monsterBox.GetInitializedMonsterFromSlot(selectedSlot);
+
+            Monster partyMonster = monsterParty.GetMonsterByIndex(partyScreen.Selection);
+
+            if(monsterParty.SetMonster(monster, partyScreen.Selection))
+                monsterBox.SetMonsterToSlot(partyMonster, selectedSlot);
+
+        }
+        else if (mode == SwitchMode.Remove)
+        {
+
+            Monster partyMonster = monsterParty.GetMonsterByIndex(partyScreen.Selection);
+
+            if(monsterParty.RemoveMonster(partyScreen.Selection))
+                monsterBox.AddMonsterToBox(partyMonster);
+
+        }
+
+        ClosePartyScreen();
+
+        confirmBox.SetActive(true);
+
+        yield return new WaitUntil(() => messageBoxConfirmed == true);
+
+        state = MonsterBoxUIState.ItemSelection;
+
+    }
+
+    public IEnumerator AddMonsterToParty()
+    {
+        state = MonsterBoxUIState.Busy;
+        messageBoxConfirmed = false;
+
+        Monster monster = monsterBox.GetInitializedMonsterFromSlot(selectedSlot);
+        monsterParty.AddMonster(monster);
+
+        confirmBox.SetActive(true);
+
+        yield return new WaitUntil(() => messageBoxConfirmed == true);
+
+        state = MonsterBoxUIState.ItemSelection;
+    }
+
+    public void SelectedMonsterToSwitch()
+    {
+        mode = SwitchMode.Switch;
+        if (state == MonsterBoxUIState.ItemSelection)
+            if (!monsterParty.HasEmptySpace())
+                OpenPartyScreen();
+            else
+                StartCoroutine(AddMonsterToParty());
+    }
+
+    public void SelectMonsterToRemoveFromParty()
+    {
+        mode = SwitchMode.Remove;
+        if (state == MonsterBoxUIState.ItemSelection)
+            OpenPartyScreen();
+    }
+
+    public void ButtonBack()
+    {
+        onBack?.Invoke();
+    }
+
+    public void MessageBoxConfirmed()
+    {
+        messageBoxConfirmed = true;
+    }
+
+    void OpenPartyScreen()
+    {
+        state = MonsterBoxUIState.PartySelection;
+        partyScreen.gameObject.SetActive(true);
+    }
+
+    void ClosePartyScreen()
+    {
+        state = MonsterBoxUIState.ItemSelection;
+        partyScreen.ClearMemberSlotMessages();
+        partyScreen.gameObject.SetActive(false);
     }
 
     public void NextPage()
@@ -105,5 +245,12 @@ public class MonsterBoxUI : MonoBehaviour
             LeftButton.SetActive(true);
             RightButton.SetActive(true);
         }
+    }
+
+    public void UpdateDetails(MonsterBoxItem item, Vector2Int index)
+    {
+        itemIcon.sprite = item.monster.FrontSprite;
+        selectedItem = index.y;
+        selectedSlot = index;
     }
 }
