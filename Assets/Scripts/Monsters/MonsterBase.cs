@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Monster", menuName = "Monster/Crea nuovo Monster")]
 public class MonsterBase : ScriptableObject
 {
+    [SerializeField] int id;
     [SerializeField] string monsterName;
 
     [TextArea]
@@ -251,6 +252,11 @@ public class MonsterBase : ScriptableObject
     public Sprite BattleIcon
     {
         get { return battleIcon; }
+    }
+
+    public int ID
+    {
+        get { return id; }
     }
 
     public List<MoveBase> LernableByItems => lernableByItems;

@@ -5474,7 +5474,7 @@ MonoBehaviour:
   treasureUI: {fileID: 34355753}
   questController: {fileID: 838524158}
   playerLevelUpUI: {fileID: 231559912}
-  monsterBoxUI: {fileID: 0}
+  monsterBoxUI: {fileID: 8350461499472551498}
 --- !u!114 &360555933
 MonoBehaviour:
   m_ObjectHideFlags: 0
