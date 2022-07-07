@@ -1,18 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BestiaryUiSlot : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Image icon;
+
+    public int index;
+
+    public void SetData(BestiaryElement element, int index)
     {
-        
+        this.index = index;
+
+        if(element.bState == BeastState.Unknown)
+        {
+
+        }
+        else if(element.bState == BeastState.Seen)
+        {
+
+        }
+        else
+        {
+
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -36,6 +36,11 @@ public class Bestiary : MonoBehaviour
         return bestiary.Where(item => item.bState == state).Count();
     }
 
+    public List<BestiaryElement> FullBestiary
+    {
+        get { return bestiary; }
+    }
+
 }
 
 public class BestiaryElement
