@@ -30,5 +30,6 @@ public enum QuestType
     DefeatedMonster,
     Catch,
     Step,
-    DefeatedTrainers
+    DefeatedTrainers,
+    Bestiary
 }

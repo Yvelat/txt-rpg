@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -34,6 +34,18 @@ public class BestiaryUI : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+    }
+
+    public void SetUpSegment(MonsterBase info)
+    {
+        description.text = info.Description;
+        monsterImage.sprite = info.FrontSprite;
+    }
+
+    public void SetUpSegmentPartial(MonsterBase info)
+    {
+        description.text = "Informazioni insufficienti";
+        monsterImage.sprite = info.FrontSprite;
     }
 
 }

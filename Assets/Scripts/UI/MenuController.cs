@@ -13,6 +13,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] GameObject partyScreen;
     [SerializeField] GameObject inventoryScreen;
     [SerializeField] QuestUI questsScreen;
+    [SerializeField] BestiaryUI bestiaryUI;
     [SerializeField] SingleAudioManager mainMenuMusic;
 
     public event Action<int> onMenuSelected;
@@ -74,6 +75,17 @@ public class MenuController : MonoBehaviour
     {
         questsScreen.gameObject.SetActive(false);
         mainMenu.SetActive(true);
+    }
+
+    public void BtMonsterBox()
+    {
+        GameController.Instance.OpenMonsterBoxUI();
+    }
+
+    public void BtBestiary()
+    {
+        bestiaryUI.gameObject.SetActive(true);
+        mainMenu.SetActive(false);
     }
 
     public void HandleUpdate()

@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
     [SerializeField] QuestController questController;
     [SerializeField] PlayerLevelUpUI playerLevelUpUI;
     [SerializeField] MonsterBoxUI monsterBoxUI;
+    [SerializeField] BestiaryUI bestiaryUI;
 
     TrainerController trainer;
 
@@ -305,9 +306,17 @@ public class GameController : MonoBehaviour
                 menuChoices.gameObject.SetActive(true);
                 state = GameState.FreeRoam;
             };
+
             monsterBoxUI.HandleUpdate(onBack);
         }
         
+    }
+
+    public void OpenMonsterBoxUI()
+    {
+        state = GameState.MonsterBoxUI;
+        bestiaryUI.gameObject.SetActive(true);
+        menuChoices.gameObject.SetActive(false);
     }
 
     public void SetCurrentScene(SceneDetails currScene)

@@ -43,6 +43,11 @@ public class Quest
         Progress += amount;
     }
 
+    public void SetProgress(int amount)
+    {
+        Progress = amount;
+    }
+
     public QuestBase Base => baseQuest;
 
     public bool Redeemed => redeemed;

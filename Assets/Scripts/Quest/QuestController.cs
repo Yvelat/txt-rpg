@@ -43,4 +43,15 @@ public class QuestController : MonoBehaviour
         }
     }
 
+    public void ProgressBestiaryQuest(int amount)
+    {
+        foreach (var quest in questList.Quests)
+        {
+            if(quest.Base.Type == QuestType.Bestiary)
+            {
+                quest.SetProgress(amount);
+            }
+        }
+    }
+
 }

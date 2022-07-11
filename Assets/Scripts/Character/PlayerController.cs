@@ -37,12 +37,17 @@ public class PlayerController : MonoBehaviour
 
     bool recovering = false;
 
+    Bestiary bestiary;
+
     private void Awake()
     {
         if (energy < 0)
         {
             energy = maxEnergy;
         }
+
+        bestiary = GetComponent<Bestiary>();
+
     }
 
     private void Update()

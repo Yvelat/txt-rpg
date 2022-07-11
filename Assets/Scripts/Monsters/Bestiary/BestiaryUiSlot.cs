@@ -9,9 +9,14 @@ public class BestiaryUiSlot : MonoBehaviour
 
     public int index;
 
+    MonsterBase monster;
+
+    BeastState state;
+
     public void SetData(BestiaryElement element, int index)
     {
         this.index = index;
+        monster = element.Monster;
 
         if(element.bState == BeastState.Unknown)
         {
@@ -25,6 +30,16 @@ public class BestiaryUiSlot : MonoBehaviour
         {
 
         }
+
+        state = element.bState;
+    }
+
+    public void onClick()
+    {
+        if (state == BeastState.Captured)
+            FindObjectOfType<BestiaryUI>().SetUpSegment(monster);
+        else if (state == BeastState.Seen)
+            FindObjectOfType<BestiaryUI>().SetUpSegmentPartial(monster);
     }
 
 }
